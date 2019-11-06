@@ -11,7 +11,9 @@
 let v;
 let predator;
 let targets = []
+
 let preys = []
+let predators = []
 
 function rnd_int_in_range(min, max) {
   return Math.floor(Math.random() * (max - min) ) + min;
@@ -19,9 +21,10 @@ function rnd_int_in_range(min, max) {
 
 function setup() {
   createCanvas(640, 360);
-  v = new Vehicle(width / 2, height / 2, createVector(0,220,0), -2, 5.5);
-  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3)
+  v = new Vehicle(width / 2, height / 2, createVector(0,220,0), -2, 5.5, 100);
+  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 4, 160)
   preys[0] = v.position;
+  predators[0] = predator.position;
   for(var i = 0; i < 20; i++)
   {
     var x = rnd_int_in_range(60, width);
@@ -34,7 +37,8 @@ function draw() {
   background(51);
   // Call the appropriate steering behaviors for our agents
 
-  let mouse = createVector(mouseX, mouseY);
+  preys[0] = v.position;
+  predators[0] = predator.position;
   if(random(1) < 0.01)
   {
     var x = rnd_int_in_range(60, width);
@@ -51,12 +55,12 @@ function draw() {
     ellipse(targets[i].x, targets[i].y, 10, 10);
   }
 
-  v.apply_behaviours(targets);
-  
+  console.log("predators length = ", predators.length)
+  v.apply_behaviours(targets, predators);
   v.update();
   v.display();
   // var seek = predator.seek_n_arrive(v.position, 10, 4000);
-  predator.apply_behaviours(preys);
+  predator.apply_behaviours(preys, undefined);
   predator.update();
   predator.display();
 }

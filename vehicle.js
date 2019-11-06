@@ -5,7 +5,7 @@
 // The "Vehicle" class
 
 class Vehicle {
-  constructor(x, y, color, vel, speed) {
+  constructor(x, y, color, vel, speed, rng) {
     this.acceleration = createVector(0, 0);
     this.velocity = createVector(0, vel);
     this.position = createVector(x, y);
@@ -15,7 +15,7 @@ class Vehicle {
     this.maxspeed = speed;
     this.maxforce = 0.25;
     this.maxbrake = 0.6;
-    this.sight_range = 100; 
+    this.sight_range = rng; 
 
     this.wander_points = [];
   }
@@ -64,23 +64,53 @@ class Vehicle {
 
   seek_n_arrive_multiple(target_list, arrive_tol, sight_radius)
   {
-    var biggest_d = Infinity;
+    var smallest_d = Infinity;
     var target_idx = null;
     for(var i = target_list.length - 1; i >= 0; i--)
     {
       var d = p5.Vector.dist(this.position, target_list[i]);
-      if(d < biggest_d){
-        biggest_d = d;
+      if(d < smallest_d){
+        smallest_d = d;
         target_idx = i;
       }
     }
-    if(biggest_d < arrive_tol && target_list.length > 0)
+    if(smallest_d < arrive_tol && target_list.length > 0)
     {
       target_list.splice(target_idx, 1);
       return createVector(0,0);
     }
-    if(target_idx != null)
+    else if(target_idx != null)
       return this.seek_n_arrive(target_list[target_idx], 50, sight_radius);
+  }
+
+  flee(predators, sight_radius)
+  {
+    if(predators === undefined || predators === null)
+      return createVector(0,0);
+      
+    var smallest_d = Infinity;
+    var predator = null;
+    console.log("length = ", predators.lenght)
+    for(var i = 0; i < predators.lenght; i++)
+    {
+      var d = p5.Vector.dist(this.position, predators[i]);
+      console.log(d)
+      if(d < smallest_d){
+        smallest_d = d;
+        predator = predators[i];
+      }
+    }
+
+    if(smallest_d < sight_radius)
+    {
+      var desired = p5.Vector.sub(this.position, predator); // A vector pointing from the location to the target
+      desired.setMag(this.maxspeed);
+      var steer = p5.Vector.sub(desired, this.velocity);
+      steer.limit(this.maxforce); // Limit to maximum steering force
+      return steer;
+    }
+
+    return createVector(0,0)
   }
 
   wander()
@@ -126,19 +156,29 @@ class Vehicle {
     return createVector(0,0);
   }
 
-  apply_behaviours(target)
+  apply_behaviours(target, predators)
   {
     var sna = null;
+    var flee = null;
     if(target != null && !Array.isArray(target))
       sna = this.seek_n_arrive(target, 100, this.sight_radius);
     else if(target != null)
       sna = this.seek_n_arrive_multiple(target, 10, this.sight_range);
 
+    flee = this.flee(predators, this.sight_range);
+
+    console.log("flee magnitude = ", flee.mag())
     var within = this.stay_within_walls(30);
     if(within.mag() === 0)
     {
+      if( flee.mag() !== 0 )
+      {
+        this.applyForce(flee);
+        console.log("fleeing...");
+      }
+
       //cant see anything to seek
-      if(sna == null || sna.mag() === 0)
+      else if(sna == null || sna.mag() === 0)
       {
         this.applyForce(this.wander());
       }
