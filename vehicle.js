@@ -5,13 +5,14 @@
 // The "Vehicle" class
 
 class Vehicle {
-  constructor(x, y) {
+  constructor(x, y, color, vel, speed) {
     this.acceleration = createVector(0, 0);
-    this.velocity = createVector(0, -2);
+    this.velocity = createVector(0, vel);
     this.position = createVector(x, y);
     this.r = 6;
+    this.color = color;
 
-    this.maxspeed = 5.5;
+    this.maxspeed = speed;
     this.maxforce = 0.25;
     this.maxbrake = 0.6;
     this.sight_range = 100; 
@@ -47,14 +48,14 @@ class Vehicle {
       desired.setMag( actual );
       var steer = p5.Vector.sub(desired, this.velocity);
       steer.limit(this.maxbrake); // Limit to maximum steering force
-      console.log("arrived!")
+      // console.log("arrived!")
       return steer;
     }
     else if(distance < sight_radius){
       desired.setMag(this.maxspeed);
       var steer = p5.Vector.sub(desired, this.velocity);
       steer.limit(this.maxforce); // Limit to maximum steering force
-      console.log("wandering to ( " + target.x + ", " + target.y + " )");
+      // console.log("wandering to ( " + target.x + ", " + target.y + " )");
       return steer;
     }
     return createVector(0,0);
@@ -92,8 +93,8 @@ class Vehicle {
     else if(this.wander_points.lenght === 1)
       this.wander_points.push(createVector(random(60, width), random(60,height)));
     
-    if(this.wander_points !== null && this.wander_point.length > 0)
-      console.log("wander point[0] = ( " + this.wander_points[0].x + ", " + this.wander_points[0].y + " )");
+    // if(this.wander_points !== null && this.wander_point.length > 0)
+      // console.log("wander point[0] = ( " + this.wander_points[0].x + ", " + this.wander_points[0].y + " )");
 
     return this.seek_n_arrive_multiple(this.wander_points, 40, 10000);
   }
@@ -162,11 +163,11 @@ class Vehicle {
     ellipse(this.position.x, this.position.y, this.sight_range, this.sight_range);
 
     let theta = this.velocity.heading() + PI / 2;
-    fill(127,0,0);
-    stroke(0,0,200);
+    fill(this.color.x, this.color.y, this.color.z);
+    stroke(this.color.x - 30, this.color.y - 30, this.color.z - 30);
     strokeWeight(1);
 
-    
+    push();
     translate(this.position.x, this.position.y);
     rotate(theta);
 
