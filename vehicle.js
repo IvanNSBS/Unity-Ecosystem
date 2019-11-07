@@ -85,7 +85,7 @@ class Vehicle {
       return this.seek_n_arrive(target_list[target_idx], 50, sight_radius);
   }
 
-  flee(predators, sight_radius)
+  flee(predators, sight, forget)
   {
     if(predators === undefined)
       return createVector(0,0);
@@ -101,7 +101,7 @@ class Vehicle {
       }
     }
 
-    var radius = this.is_fleeing ? this.forget_range : this.sight_range;
+    var radius = this.is_fleeing ? forget : sight;
     if(smallest_d < radius)
     {
       this.is_fleeing = true;
@@ -159,7 +159,7 @@ class Vehicle {
     return createVector(0,0);
   }
 
-  apply_behaviours(target, predators)
+  apply_behaviours(target, predators, avoids)
   {
     var sna = null;
     var flee = createVector(0,0);
@@ -169,11 +169,16 @@ class Vehicle {
       sna = this.seek_n_arrive_multiple(target, 10, this.sight_range);
     
     if(predators !== undefined)
-      flee = this.flee(predators, this.forget_range);
+      flee = this.flee(predators, this.sight_range, this.forget_range);
+
+    var av_force = createVector(0,0);
+    if(avoids !== undefined)
+      av_force = this.flee(avoids, this.sight_range/2, this.sight_range/2);
 
     var within = this.stay_within_walls(30);
     if(within.mag() === 0)
     {
+      this.applyForce(av_force);
       if( flee.mag() !== 0 ){
         this.wander_point = [];
         this.applyForce(flee);

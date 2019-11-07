@@ -33,7 +33,7 @@ function rnd_int_in_range(min, max) {
 function setup() {
   createCanvas(1280, 640);
   
-  for(var i = 1; i < 4; i++)
+  for(var i = 1; i < 11; i++)
     v.push(new Vehicle( width/i, height/i, createVector(0,220,0), -2, 2, 80));
 
   predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3.3, 120);
@@ -78,9 +78,13 @@ function draw() {
 
   for(var i = 0; i < v.length; i++)
   {
-      v[i].apply_behaviours(targets, predators);
-      v[i].update();
-      v[i].display();
+    let avoids = [];
+    for(var j = 0; j < preys.length; j++)
+      if(j !== i)
+        avoids.push(preys[j]);
+    v[i].apply_behaviours(targets, predators, avoids);
+    v[i].update();
+    v[i].display();
   }
   // var seek = predator.seek_n_arrive(v.position, 10, 4000);
   predator.apply_behaviours(preys, undefined);
