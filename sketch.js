@@ -33,11 +33,12 @@ function rnd_int_in_range(min, max) {
 function setup() {
   createCanvas(1280, 640);
   
-  for(var i = 1; i < 11; i++)
-    v.push(new Vehicle( width/i, height/i, createVector(0,220,0), -2, 2, 80));
+  for(var i = 1; i < 200; i++)
+    v.push(new Vehicle( rnd_int_in_range(60, width), rnd_int_in_range(60, height), createVector(0,220,0), -2, 2, 80));
 
-  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3.3, 120);
+  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -1.5, 3.0, 120);
 
+  
   predators[0] = predator.position;
 
   for(var i = 0; i < 20; i++)
@@ -60,11 +61,15 @@ function draw() {
       preys[i] = v[i].position;
   }
   predators[0] = predator.position;
-  if(random(1) < 0.05)
+  if(random(1) < 0.8)
   {
     var x = rnd_int_in_range(60, width-60);
     var y = rnd_int_in_range(60, height-60);
     targets.push(createVector(x, y));
+
+    var x2 = rnd_int_in_range(60, width-60);
+    var y2 = rnd_int_in_range(60, height-60);
+    targets.push(createVector(x2, y2));
   }
 
   for(var i = targets.length - 1; i >= 0; i--)

@@ -184,7 +184,7 @@ class Vehicle {
         this.applyForce(flee);
       }
 
-      //cant see anything to seek
+      // cant see anything to seek
       else if(sna == null || sna.mag() === 0)
         this.applyForce(this.wander());
       
@@ -201,13 +201,13 @@ class Vehicle {
   display() {
     // Draw a triangle rotated in the direction of velocity
     //draw sight_radius
-    fill(150,150,150, 100);
-    stroke(100,100,100,100);
-    strokeWeight(1);
-    ellipse(this.position.x, this.position.y, this.sight_range, this.sight_range);
-    fill(0,0,0,0)
-    stroke(100, 0, 0, 100);
-    ellipse(this.position.x, this.position.y, this.forget_range, this.forget_range);
+    // fill(150,150,150, 100);
+    // stroke(100,100,100,100);
+    // strokeWeight(1);
+    // ellipse(this.position.x, this.position.y, this.sight_range, this.sight_range);
+    // fill(0,0,0,0)
+    // stroke(100, 0, 0, 100);
+    // ellipse(this.position.x, this.position.y, this.forget_range, this.forget_range);
     
     let theta = this.velocity.heading() + PI / 2;
     
@@ -227,7 +227,7 @@ class Vehicle {
     endShape(CLOSE);
     
     fill(0,0,0,0);
-    arc(0, 0, this.forget_range, this.forget_range, PI + PI/3, -PI/3, PIE);
+    // arc(0, 0, this.forget_range, this.forget_range, PI + PI/3, -PI/3, PIE);
     
     pop();
   }
