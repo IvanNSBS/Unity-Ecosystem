@@ -15,11 +15,14 @@
  */
 
 let v = [];
-let predator;
+let predator_s = [];
 let targets = []
 
 let preys = []
-let predators = []
+let predator_list = []
+
+let predator_amnt = 25;
+let prey_amnt = 200;
 
 function rnd_int_in_range(min, max) {
   var val = Math.floor(Math.random() * (max - min) ) + min;
@@ -33,13 +36,14 @@ function rnd_int_in_range(min, max) {
 function setup() {
   createCanvas(1280, 640);
   
-  for(var i = 1; i < 200; i++)
-    v.push(new Vehicle( rnd_int_in_range(60, width), rnd_int_in_range(60, height), createVector(0,220,0), -2, 2, 80));
+  for(var i = 0; i < prey_amnt; i++)
+    v.push(new Vehicle( rnd_int_in_range(60, width), rnd_int_in_range(60, height), createVector(0,220,0), -2, 5.0, 80));
 
-  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -1.5, 3.0, 120);
+  for(var i = 0; i < predator_amnt; i++){
+    predator_s.push(new Vehicle( rnd_int_in_range(60, width), rnd_int_in_range(60, height), createVector(220,0,0), -1.5, 3.0, 120));
+    predator_list[i] = predator_s[predator_s.length - 1].position;
+  }
 
-  
-  predators[0] = predator.position;
 
   for(var i = 0; i < 20; i++)
   {
@@ -53,14 +57,11 @@ function draw() {
   background(51);
   // Call the appropriate steering behaviors for our agents
 
-  for(var i = 0; i < v.length; i++)
-  {
-      v[i].apply_behaviours(targets, predators);
-      v[i].update();
-      v[i].display();
-      preys[i] = v[i].position;
+
+  for(var i = 0; i < predator_s.length; i++){
+    predator_list[i] = predator_s[i].position;
   }
-  predators[0] = predator.position;
+
   if(random(1) < 0.8)
   {
     var x = rnd_int_in_range(60, width-60);
@@ -72,6 +73,9 @@ function draw() {
     targets.push(createVector(x2, y2));
   }
 
+
+
+  
   for(var i = targets.length - 1; i >= 0; i--)
   {
     // Draw an ellipse at the mouse position
@@ -81,18 +85,35 @@ function draw() {
     ellipse(targets[i].x, targets[i].y, 10, 10);
   }
 
+
   for(var i = 0; i < v.length; i++)
   {
     let avoids = [];
     for(var j = 0; j < preys.length; j++)
       if(j !== i)
         avoids.push(preys[j]);
-    v[i].apply_behaviours(targets, predators, avoids);
+    v[i].apply_behaviours(targets, predator_list, avoids);
     v[i].update();
     v[i].display();
+    preys[i] = v[i].position;
   }
+
+  for(var i = 0; i < predator_s.length; i++){
+    predator_list[i] = predator_s[i].position;
+  }
+
+  for(var i = 0; i < predator_s.length; i++){
+
+    let avoids = [];
+    for(var j = 0; j < predator_s.length; j++)
+      if(j !== i)
+        avoids.push(predator_s[j].position);
+
+    predator_s[i].apply_behaviours(preys, undefined, avoids);
+    predator_s[i].update();
+    predator_s[i].display();
+  }
+  
+
   // var seek = predator.seek_n_arrive(v.position, 10, 4000);
-  predator.apply_behaviours(preys, undefined);
-  predator.update();
-  predator.display();
 }
