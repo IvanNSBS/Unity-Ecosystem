@@ -8,7 +8,7 @@
 // One vehicle "seeks"
 // See: http://www.red3d.com/cwr/
 
-let v;
+let v = [];
 let predator;
 let targets = []
 
@@ -21,10 +21,14 @@ function rnd_int_in_range(min, max) {
 
 function setup() {
   createCanvas(640, 360);
-  v = new Vehicle(width / 2, height / 2, createVector(0,220,0), -2, 5.5, 100);
-  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 4, 160)
-  preys[0] = v.position;
+  
+  for(var i = 0; i < 1; i++)
+    v.push(new Vehicle(rnd_int_in_range(0,width), rnd_int_in_range(0,height), createVector(0,220,0), -2, 2, 100));
+
+  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3.2, 100);
+
   predators[0] = predator.position;
+
   for(var i = 0; i < 20; i++)
   {
     var x = rnd_int_in_range(60, width);
@@ -37,7 +41,13 @@ function draw() {
   background(51);
   // Call the appropriate steering behaviors for our agents
 
-  preys[0] = v.position;
+  for(var i = 0; i < v.length; i++)
+  {
+      v[i].apply_behaviours(targets, predators);
+      v[i].update();
+      v[i].display();
+      preys[i] = v[i].position;
+  }
   predators[0] = predator.position;
   if(random(1) < 0.01)
   {
@@ -55,10 +65,12 @@ function draw() {
     ellipse(targets[i].x, targets[i].y, 10, 10);
   }
 
-  console.log("predators length = ", predators.length)
-  v.apply_behaviours(targets, predators);
-  v.update();
-  v.display();
+  for(var i = 0; i < v.length; i++)
+  {
+      v[i].apply_behaviours(targets, predators);
+      v[i].update();
+      v[i].display();
+  }
   // var seek = predator.seek_n_arrive(v.position, 10, 4000);
   predator.apply_behaviours(preys, undefined);
   predator.update();

@@ -85,16 +85,14 @@ class Vehicle {
 
   flee(predators, sight_radius)
   {
-    if(predators === undefined || predators === null)
+    if(predators === undefined)
       return createVector(0,0);
       
     var smallest_d = Infinity;
     var predator = null;
-    console.log("length = ", predators.lenght)
-    for(var i = 0; i < predators.lenght; i++)
+    for(var i = 0; i < predators.length; i++)
     {
       var d = p5.Vector.dist(this.position, predators[i]);
-      console.log(d)
       if(d < smallest_d){
         smallest_d = d;
         predator = predators[i];
@@ -106,7 +104,7 @@ class Vehicle {
       var desired = p5.Vector.sub(this.position, predator); // A vector pointing from the location to the target
       desired.setMag(this.maxspeed);
       var steer = p5.Vector.sub(desired, this.velocity);
-      steer.limit(this.maxforce); // Limit to maximum steering force
+      steer.limit(this.maxbrake); // Limit to maximum steering force
       return steer;
     }
 
@@ -159,23 +157,20 @@ class Vehicle {
   apply_behaviours(target, predators)
   {
     var sna = null;
-    var flee = null;
+    var flee = createVector(0,0);
     if(target != null && !Array.isArray(target))
       sna = this.seek_n_arrive(target, 100, this.sight_radius);
     else if(target != null)
       sna = this.seek_n_arrive_multiple(target, 10, this.sight_range);
+    
+    if(predators !== undefined)
+      flee = this.flee(predators, this.sight_range);
 
-    flee = this.flee(predators, this.sight_range);
-
-    console.log("flee magnitude = ", flee.mag())
     var within = this.stay_within_walls(30);
     if(within.mag() === 0)
     {
       if( flee.mag() !== 0 )
-      {
         this.applyForce(flee);
-        console.log("fleeing...");
-      }
 
       //cant see anything to seek
       else if(sna == null || sna.mag() === 0)
