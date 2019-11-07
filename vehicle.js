@@ -216,12 +216,13 @@ class Vehicle {
     rotate(theta);
     
     beginShape();
-    // line(0,0,0, 30);
-    arc(0, 0, this.forget_range, this.forget_range, PI + PI/3, -PI/3, PIE);
     vertex(0, -this.r * 2);
     vertex(-this.r, this.r * 2);
     vertex(this.r, this.r * 2);
     endShape(CLOSE);
+    
+    fill(0,0,0,0);
+    arc(0, 0, this.forget_range, this.forget_range, PI + PI/3, -PI/3, PIE);
     
     pop();
   }
