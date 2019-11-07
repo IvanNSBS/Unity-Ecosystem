@@ -173,7 +173,7 @@ class Vehicle {
 
     var av_force = createVector(0,0);
     if(avoids !== undefined)
-      av_force = this.flee(avoids, this.sight_range/2, this.sight_range/2);
+      av_force = this.flee(avoids, this.sight_range, this.sight_range);
 
     var within = this.stay_within_walls(30);
     if(within.mag() === 0)

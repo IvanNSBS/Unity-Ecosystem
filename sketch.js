@@ -21,7 +21,7 @@ let targets = []
 let preys = []
 let predator_list = []
 
-let predator_amnt = 25;
+let predator_amnt = 15;
 let prey_amnt = 200;
 
 function rnd_int_in_range(min, max) {
