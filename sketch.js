@@ -8,6 +8,12 @@
 // One vehicle "seeks"
 // See: http://www.red3d.com/cwr/
 
+/**
+ * TODO: Make fleeing better
+ *        - Use memory range (will flee until predator is within that range)
+ *        - Reset wander point once start fleeing
+ */
+
 let v = [];
 let predator;
 let targets = []
@@ -16,23 +22,28 @@ let preys = []
 let predators = []
 
 function rnd_int_in_range(min, max) {
-  return Math.floor(Math.random() * (max - min) ) + min;
+  var val = Math.floor(Math.random() * (max - min) ) + min;
+  if(val < min)
+    val = min;
+  if(val > max)
+    val = max;
+  return val;
 }
 
 function setup() {
-  createCanvas(640, 360);
+  createCanvas(1280, 640);
   
-  for(var i = 0; i < 1; i++)
-    v.push(new Vehicle(rnd_int_in_range(0,width), rnd_int_in_range(0,height), createVector(0,220,0), -2, 2, 100));
+  for(var i = 1; i < 4; i++)
+    v.push(new Vehicle( width/i, height/i, createVector(0,220,0), -2, 2, 80));
 
-  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3.2, 100);
+  predator = new Vehicle(width/4, height/4, createVector(220,0,0), -0.5, 3.3, 120);
 
   predators[0] = predator.position;
 
   for(var i = 0; i < 20; i++)
   {
-    var x = rnd_int_in_range(60, width);
-    var y = rnd_int_in_range(60, height);
+    var x = rnd_int_in_range(60, width-60);
+    var y = rnd_int_in_range(60, height-60);
     targets.push(createVector(x, y));
   }
 }
@@ -49,10 +60,10 @@ function draw() {
       preys[i] = v[i].position;
   }
   predators[0] = predator.position;
-  if(random(1) < 0.01)
+  if(random(1) < 0.05)
   {
-    var x = rnd_int_in_range(60, width);
-    var y = rnd_int_in_range(60, height);
+    var x = rnd_int_in_range(60, width-60);
+    var y = rnd_int_in_range(60, height-60);
     targets.push(createVector(x, y));
   }
 

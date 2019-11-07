@@ -15,9 +15,11 @@ class Vehicle {
     this.maxspeed = speed;
     this.maxforce = 0.25;
     this.maxbrake = 0.6;
-    this.sight_range = rng; 
+    this.sight_range = rng;
+    this.forget_range = rng*1.8; 
 
     this.wander_points = [];
+    this.is_fleeing = false;
   }
 
   // Method to update location
@@ -62,7 +64,7 @@ class Vehicle {
     // this.applyForce(steer);
   }
 
-  seek_n_arrive_multiple(target_list, arrive_tol, sight_radius)
+  seek_n_arrive_multiple(target_list, arrive_tol, sight_radius, forget_radius)
   {
     var smallest_d = Infinity;
     var target_idx = null;
@@ -99,8 +101,10 @@ class Vehicle {
       }
     }
 
-    if(smallest_d < sight_radius)
+    var radius = this.is_fleeing ? this.forget_range : this.sight_range;
+    if(smallest_d < radius)
     {
+      this.is_fleeing = true;
       var desired = p5.Vector.sub(this.position, predator); // A vector pointing from the location to the target
       desired.setMag(this.maxspeed);
       var steer = p5.Vector.sub(desired, this.velocity);
@@ -108,6 +112,7 @@ class Vehicle {
       return steer;
     }
 
+    this.is_fleeing = false;
     return createVector(0,0)
   }
 
@@ -164,20 +169,19 @@ class Vehicle {
       sna = this.seek_n_arrive_multiple(target, 10, this.sight_range);
     
     if(predators !== undefined)
-      flee = this.flee(predators, this.sight_range);
+      flee = this.flee(predators, this.forget_range);
 
     var within = this.stay_within_walls(30);
     if(within.mag() === 0)
     {
-      if( flee.mag() !== 0 )
+      if( flee.mag() !== 0 ){
+        this.wander_point = [];
         this.applyForce(flee);
+      }
 
       //cant see anything to seek
       else if(sna == null || sna.mag() === 0)
-      {
         this.applyForce(this.wander());
-      }
-      //seek target
       
       else
       {
@@ -196,22 +200,29 @@ class Vehicle {
     stroke(100,100,100,100);
     strokeWeight(1);
     ellipse(this.position.x, this.position.y, this.sight_range, this.sight_range);
-
+    fill(0,0,0,0)
+    stroke(100, 0, 0, 100);
+    ellipse(this.position.x, this.position.y, this.forget_range, this.forget_range);
+    
     let theta = this.velocity.heading() + PI / 2;
+    
+    
     fill(this.color.x, this.color.y, this.color.z);
     stroke(this.color.x - 30, this.color.y - 30, this.color.z - 30);
     strokeWeight(1);
-
+    
     push();
     translate(this.position.x, this.position.y);
     rotate(theta);
-
+    
     beginShape();
+    // line(0,0,0, 30);
+    arc(0, 0, this.forget_range, this.forget_range, PI + PI/3, -PI/3, PIE);
     vertex(0, -this.r * 2);
     vertex(-this.r, this.r * 2);
     vertex(this.r, this.r * 2);
     endShape(CLOSE);
-
+    
     pop();
   }
 }
