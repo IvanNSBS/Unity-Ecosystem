@@ -42,7 +42,9 @@ class Vehicle {
   // STEER = DESIRED MINUS VELOCITY
   seek_n_arrive(target, arrive_tol, sight_radius) {
 
-    var desired = p5.Vector.sub(target, this.position); // A vector pointing from the location to the target
+    var actual_target = target instanceof(Vehicle) ? target.position : target;
+
+    var desired = p5.Vector.sub(actual_target, this.position); // A vector pointing from the location to the target
     var distance = desired.mag();
 
     if(distance < arrive_tol){
@@ -50,18 +52,17 @@ class Vehicle {
       desired.setMag( actual );
       var steer = p5.Vector.sub(desired, this.velocity);
       steer.limit(this.maxbrake); // Limit to maximum steering force
-      // console.log("arrived!")
       return steer;
     }
+
     else if(distance < sight_radius){
       desired.setMag(this.maxspeed);
       var steer = p5.Vector.sub(desired, this.velocity);
       steer.limit(this.maxforce); // Limit to maximum steering force
-      // console.log("wandering to ( " + target.x + ", " + target.y + " )");
       return steer;
     }
+
     return createVector(0,0);
-    // this.applyForce(steer);
   }
 
   seek_n_arrive_multiple(target_list, arrive_tol, sight_radius, forget_radius)
@@ -70,17 +71,20 @@ class Vehicle {
     var target_idx = null;
     for(var i = target_list.length - 1; i >= 0; i--)
     {
-      var d = p5.Vector.dist(this.position, target_list[i]);
+      var actual_target = target_list[i] instanceof(Vehicle) ? target_list[i].position : target_list[i];
+      var d = p5.Vector.dist(this.position, actual_target);
       if(d < smallest_d){
         smallest_d = d;
         target_idx = i;
       }
     }
+
     if(smallest_d < arrive_tol && target_list.length > 0)
     {
       target_list.splice(target_idx, 1);
       return createVector(0,0);
     }
+    
     else if(target_idx != null)
       return this.seek_n_arrive(target_list[target_idx], 50, sight_radius);
   }
@@ -90,14 +94,16 @@ class Vehicle {
     if(predators === undefined)
       return createVector(0,0);
       
+      
     var smallest_d = Infinity;
     var predator = null;
     for(var i = 0; i < predators.length; i++)
     {
-      var d = p5.Vector.dist(this.position, predators[i]);
+      var actual_target = predators[i] instanceof(Vehicle) ? predators[i].position : predators[i];
+      var d = p5.Vector.dist(this.position, actual_target);
       if(d < smallest_d){
         smallest_d = d;
-        predator = predators[i];
+        predator = actual_target;
       }
     }
 
