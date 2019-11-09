@@ -130,9 +130,10 @@ GameObject:
   m_Component:
   - component: {fileID: 219777377}
   - component: {fileID: 219777376}
-  - component: {fileID: 219777375}
   - component: {fileID: 219777374}
   - component: {fileID: 219777373}
+  - component: {fileID: 219777378}
+  - component: {fileID: 219777375}
   m_Layer: 0
   m_Name: Animal
   m_TagString: Untagged
@@ -196,11 +197,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 219777372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a717ac7a534b174088eccd05f14bf62, type: 3}
+  m_Script: {fileID: 11500000, guid: 723c4890490b9804c83ab5d59739135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Acceleration: 0
-  m_Velocity: 0
+  m_SteerBehavior: {fileID: 219777378}
+  m_AgentGenes:
+    m_IsMale: 0
 --- !u!212 &219777376
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -264,6 +266,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &219777378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219777372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba51150712be2b48874e6fd03e8ef27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
