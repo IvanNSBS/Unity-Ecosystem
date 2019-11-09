@@ -10,8 +10,9 @@ public class Agent : MonoBehaviour {
     private void Update()
     {
         Vector2 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2[] targets = {mouse_pos};
         // Seek(new Vector2(10, 0), 10000);
-        var s = m_SteerBehavior.Seek(mouse_pos, 100000, m_AgentGenes);
+        var s = m_SteerBehavior.Seek(targets, 100000, m_AgentGenes);
         m_SteerBehavior.ApplyForce(s);
     }
 }
