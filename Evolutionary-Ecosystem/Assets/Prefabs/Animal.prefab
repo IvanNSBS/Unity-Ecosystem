@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1532439376395861411}
   - component: {fileID: 1532439376395861404}
   - component: {fileID: 1532439376395861409}
+  - component: {fileID: 7065849765272755583}
   - component: {fileID: 1532439376395861405}
   m_Layer: 0
   m_Name: Animal
@@ -156,7 +157,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723c4890490b9804c83ab5d59739135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_RigidBody: {fileID: 0}
   m_SteerBehavior: {fileID: 0}
+  m_LifeComponent: {fileID: 0}
   m_AgentGenes:
     m_MaxSpeed: 1
     m_MaxForce: 0.2
@@ -165,6 +168,29 @@ MonoBehaviour:
     m_ForgetRadius: 1
   visible_food: []
   visible_predators: []
+--- !u!114 &7065849765272755583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532439376395861410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741d398d407cf1c43aa7cd6c9002c87f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RigidBody: {fileID: 0}
+  m_LifeTime: 500
+  m_TimeToDeathByHunger: 150
+  m_TimeToDeathByThirst: 80
+  m_RemainingLifetime: 0
+  m_CurrentHunger: 0
+  m_CurrentThirst: 0
+  m_TotalEnergy: 300
+  m_CurrentEnergy: 0
+  m_TotalHealth: 1
+  m_CurrentHealth: 0
 --- !u!114 &1532439376395861405
 MonoBehaviour:
   m_ObjectHideFlags: 0

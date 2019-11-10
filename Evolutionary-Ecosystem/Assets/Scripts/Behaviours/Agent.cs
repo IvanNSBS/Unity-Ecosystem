@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Agent : MonoBehaviour {
+
+    [Header("Components")]
+    public Rigidbody2D m_RigidBody;
     public SteerComponent m_SteerBehavior;
+    public LifeComponent m_LifeComponent;
     public Genes m_AgentGenes;
     [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
@@ -12,18 +16,9 @@ public class Agent : MonoBehaviour {
 
     private Vector2? wander_point = null;
 
-
-    [Header("Life Parameters")]
-    public float m_LifeTime = 500.0f;
-    public float m_TimeToDeathByHunger = 150.0f;
-    public float m_TimeToDeathByThirst = 80.0f;
-    public float m_RemainingLifetime;
-    public float m_CurrentHunger, m_CurrentThirst;
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
-        m_RemainingLifetime = m_LifeTime;
-        m_CurrentHunger = 0;
-        m_CurrentThirst = 0;
+        m_LifeComponent = GetComponent<LifeComponent>();
     }
 
     private bool waiting = false;
@@ -75,12 +70,6 @@ public class Agent : MonoBehaviour {
         //     wander_point = null;
         //     m_SteerBehavior.ApplyForce(avoid, m_AgentGenes.m_MaxSpeed);
         // }
-        m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
-        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger;
-        m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
-
-        var sprite = GetComponent<SpriteRenderer>();
-        sprite.color = Color.Lerp(Color.red, Color.green, m_RemainingLifetime/m_LifeTime);
 
         if(visible_food.Count == 0 && visible_predators.Count == 0)
             Explore();
