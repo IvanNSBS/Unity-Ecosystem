@@ -115,9 +115,8 @@ public class SteerComponent : MonoBehaviour
             Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
             if(min_dist < sight_radius)
             {
-                var steer = -GetSteer(pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
-                Debug.Log("Steer = " + steer);
-                return steer;
+                var steer = GetSteer(pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
+                return -steer;
             }
         }
         return Vector2.zero;

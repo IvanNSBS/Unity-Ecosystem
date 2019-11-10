@@ -25,11 +25,26 @@ public class VisionComponent : MonoBehaviour
     /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject))
-            obj_agent.visible_food.Add(other.gameObject);
+        var agent = other.gameObject.GetComponent<Agent>();
+        if(!agent){
+            if(!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject))
+                obj_agent.visible_food.Add(other.gameObject);
+        }
+
+        else if(!m_IsForget && !obj_agent.visible_predators.Contains(other.gameObject)){
+            // Debug.Log("Adding " + other.gameObject);
+            obj_agent.visible_predators.Add(other.gameObject);
+        }    
     }
     private void OnTriggerExit2D(Collider2D other) {
-        if(!m_IsForget && obj_agent.visible_food.Contains(other.gameObject))
-            obj_agent.visible_food.Remove(other.gameObject);
+        var agent = other.gameObject.GetComponent<Agent>();
+        if(!agent){
+            if(!m_IsForget && obj_agent.visible_food.Contains(other.gameObject))
+                obj_agent.visible_food.Remove(other.gameObject);
+        }
+                
+        else if(!m_IsForget && obj_agent.visible_predators.Contains(other.gameObject)){
+            obj_agent.visible_predators.Remove(other.gameObject);
+        }
     }
 }

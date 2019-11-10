@@ -33,7 +33,8 @@ public class Agent : MonoBehaviour {
         var steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         if( arrived )
-            StartCoroutine( WaitAfterArrive(2.0f) );
+            wander_point = null;
+            // StartCoroutine( WaitAfterArrive(2.0f) );
     }
 
     private void SeekFood()
@@ -41,6 +42,13 @@ public class Agent : MonoBehaviour {
         wander_point = null;
         bool arrived = false;
         var steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.2f, m_AgentGenes, ref arrived);
+        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
+    }
+
+    private void EvadeAgents()
+    {
+        wander_point = null;
+        var steer = m_SteerBehavior.Evade(visible_predators, m_AgentGenes.m_SightRadius, m_AgentGenes);
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }
 
@@ -53,9 +61,12 @@ public class Agent : MonoBehaviour {
         //     wander_point = null;
         //     m_SteerBehavior.ApplyForce(avoid, m_AgentGenes.m_MaxSpeed);
         // }
-        if(visible_food.Count == 0)
+        if(visible_food.Count == 0 && visible_predators.Count == 0)
             Explore();
-        else
+        else if(visible_predators.Count == 0)
             SeekFood();
+        else
+            EvadeAgents();
+
     }
 }
