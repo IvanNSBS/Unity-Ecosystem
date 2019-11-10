@@ -5,11 +5,25 @@ using System.Collections.Generic;
 public class Agent : MonoBehaviour {
     public SteerComponent m_SteerBehavior;
     public Genes m_AgentGenes;
-    private Vector2? wander_point = null;
+    [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
     public List<GameObject> visible_predators = new List<GameObject>();
+
+
+    private Vector2? wander_point = null;
+
+
+    [Header("Life Parameters")]
+    public float m_LifeTime = 500.0f;
+    public float m_TimeToDeathByHunger = 150.0f;
+    public float m_TimeToDeathByThirst = 80.0f;
+    public float m_RemainingLifetime;
+    public float m_CurrentHunger, m_CurrentThirst;
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
+        m_RemainingLifetime = m_LifeTime;
+        m_CurrentHunger = 0;
+        m_CurrentThirst = 0;
     }
 
     private bool waiting = false;
@@ -25,7 +39,7 @@ public class Agent : MonoBehaviour {
 
     private void Explore()
     {
-        if(wander_point == null && !waiting)
+        if(wander_point == null)
             wander_point = new Vector2( Random.Range(-5.7f, 5.7f), Random.Range(-3.6f, 3.6f) );
         
         Vector2[] pts = { (Vector2)wander_point };
@@ -33,8 +47,8 @@ public class Agent : MonoBehaviour {
         var steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         if( arrived )
-            wander_point = null;
-            // StartCoroutine( WaitAfterArrive(1.0f) );
+            StartCoroutine( WaitAfterArrive(1.0f) );
+            // wander_point = null;
     }
 
     private void SeekFood()
@@ -61,6 +75,13 @@ public class Agent : MonoBehaviour {
         //     wander_point = null;
         //     m_SteerBehavior.ApplyForce(avoid, m_AgentGenes.m_MaxSpeed);
         // }
+        m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
+        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger;
+        m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
+
+        var sprite = GetComponent<SpriteRenderer>();
+        sprite.color = Color.Lerp(Color.red, Color.green, m_RemainingLifetime/m_LifeTime);
+
         if(visible_food.Count == 0 && visible_predators.Count == 0)
             Explore();
         else if(visible_predators.Count == 0)
