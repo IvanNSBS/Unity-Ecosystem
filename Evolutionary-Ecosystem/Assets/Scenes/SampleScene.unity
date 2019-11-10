@@ -203,11 +203,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SteerBehavior: {fileID: 0}
   m_AgentGenes:
-    m_MaxSpeed: 5
-    m_MaxForce: 0.5
-    m_MaxBrake: 1
-    m_SightRadius: 2
-    m_ForgetRadius: 4
+    m_MaxSpeed: 1
+    m_MaxForce: 0.2
+    m_MaxBrake: 0.3
+    m_SightRadius: 0.5
+    m_ForgetRadius: 1
+  visible_food: []
+  visible_predators: []
 --- !u!212 &219777376
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -283,22 +285,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba51150712be2b48874e6fd03e8ef27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &219777379
-CircleCollider2D:
+--- !u!114 &219777379
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219777372}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.37
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc27b3d765ae7e42953638b83b996f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsForget: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +351,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3.86
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -382,3 +381,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1704640322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1704640323}
+  - component: {fileID: 1704640324}
+  m_Layer: 0
+  m_Name: FoodSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1704640323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704640322}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.9297258, y: -1.5985235, z: -1.6831777}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1704640324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704640322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1440cdf33d54944fa1c6704202d81f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InitialAmount: 20
+  m_SpawnPct: 0.05
+  m_FoodPrefab: {fileID: 7706643614276787505, guid: c1541cbbc41c3d44d82033e84ea9b9c5,
+    type: 3}

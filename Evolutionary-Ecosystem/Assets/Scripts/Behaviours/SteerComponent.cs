@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SteerComponent : MonoBehaviour 
 {
@@ -41,6 +42,25 @@ public class SteerComponent : MonoBehaviour
             }
         }
     }
+    public void GetClosest(ref List<GameObject> targets, out GameObject target_obj, out float min_dist){
+        target_obj = null;
+        min_dist = Mathf.Infinity;
+        for(int i = targets.Count -1; i >= 0; i--)
+        {
+            var target = targets[i];
+            if(target == null){
+                targets.RemoveAt(i);
+                continue;
+            }
+            Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
+            float distance = (pos - GetPosition()).magnitude;
+            if(distance < min_dist)
+            {
+                min_dist = distance;
+                target_obj = target;
+            }
+        }
+    }
 
     public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
     {
@@ -62,17 +82,40 @@ public class SteerComponent : MonoBehaviour
         return Vector2.zero;
     }
 
-    public Vector2 Evade(Vector2[] targets, float sight_radius, Genes genes)
+    public Vector2 SeekAndArrive(ref List<GameObject> targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
     {
-        Vector2? target_pos;
+        GameObject target_pos;
         float min_dist;
-        GetClosest(targets, out target_pos, out min_dist);
+        GetClosest(ref targets, out target_pos, out min_dist);
 
         if(target_pos != null)
         {
+            Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
+            if(min_dist < arrive_tol){
+                var steer =  GetSteer(pos, seek_tol, genes, lerp: true);
+                arrived = steer.magnitude <= 0.0001f;
+                targets.Remove(target_pos);
+                return steer;
+            }
+
+            return GetSteer(pos, seek_tol, genes);
+        }
+
+        return Vector2.zero;
+    }
+
+    public Vector2 Evade(List<GameObject> targets, float sight_radius, Genes genes)
+    {
+        GameObject target_pos;
+        float min_dist;
+        GetClosest(ref targets, out target_pos, out min_dist);
+
+        if(target_pos != null)
+        {
+            Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
             if(min_dist < sight_radius)
             {
-                var steer = -GetSteer((Vector2)target_pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
+                var steer = -GetSteer(pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
                 Debug.Log("Steer = " + steer);
                 return steer;
             }

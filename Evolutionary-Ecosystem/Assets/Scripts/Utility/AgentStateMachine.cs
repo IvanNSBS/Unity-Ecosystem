@@ -1,0 +1,6 @@
+class AgentStateMachine
+{
+    AgentState state;
+
+    
+}
