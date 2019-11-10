@@ -4,7 +4,6 @@ using System.Collections;
 public class Agent : MonoBehaviour {
     public SteerComponent m_SteerBehavior;
     public Genes m_AgentGenes;
-
     private Vector2? wander_point = null;
     private bool waiting = false;
     private void Start() {
@@ -21,7 +20,7 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    private void Wander()
+    private void Explore()
     {
         if(wander_point == null)
             wander_point = new Vector2( Random.Range(-4.0f, 8.0f), Random.Range(0.0f, 4.0f) );
@@ -34,14 +33,18 @@ public class Agent : MonoBehaviour {
             StartCoroutine( WaitAfterArrive(2.0f) );
     }
 
+
     private void Update()
     {
-        // Vector2 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // Vector2[] targets = {mouse_pos};
-        // bool arrived = false;
-        // var s = m_SteerBehavior.SeekAndArrive(targets, 100000, 0.35f, m_AgentGenes, ref arrived);
-        // m_SteerBehavior.ApplyForce(s, m_AgentGenes.m_MaxSpeed);
+        Vector2 mouse = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+        Vector2[] evade_list = { mouse };
+        var avoid = m_SteerBehavior.Evade(evade_list, 3.0f, m_AgentGenes);
+        if( avoid.magnitude > 0.0001f){
+            wander_point = null;
+            m_SteerBehavior.ApplyForce(avoid, m_AgentGenes.m_MaxSpeed);
+        }
+        else
+            Explore();
 
-        Wander();
     }
 }

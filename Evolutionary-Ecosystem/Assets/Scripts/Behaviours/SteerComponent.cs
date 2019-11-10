@@ -13,8 +13,8 @@ public class SteerComponent : MonoBehaviour
     public Vector2 GetSteer( Vector2 target_pos, float tolerance, Genes genes, bool lerp=false )
     {
 
-        Vector2 desired = (target_pos - GetPosition()).normalized * genes.m_MaxSpeed;
-        float distance = desired.magnitude;
+        Vector2 desired = (target_pos - GetPosition()).normalized * genes.m_MaxSpeed;// * invert;
+        float distance = (target_pos-GetPosition()).magnitude;
 
         if(distance < tolerance)
         {
@@ -22,18 +22,15 @@ public class SteerComponent : MonoBehaviour
                 desired = SetMagnitude(desired, genes.m_MaxSpeed*distance/tolerance);
             Vector2 steer = desired - GetVelocity();
             steer = Vector2.ClampMagnitude(steer, lerp ? genes.m_MaxBrake : genes.m_MaxForce );
-
-            // Debug.Log(steer);
             return steer;
         }
 
         return Vector2.zero;
     }
     
-    public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
-    {
-        Vector2? target_pos = null;
-        float min_dist = Mathf.Infinity;
+    public void GetClosest(Vector2[] targets, out Vector2? target_pos, out float min_dist){
+        target_pos = null;
+        min_dist = Mathf.Infinity;
         foreach(var target in targets)
         {
             float distance = (target - GetPosition()).magnitude;
@@ -43,6 +40,13 @@ public class SteerComponent : MonoBehaviour
                 target_pos = target;
             }
         }
+    }
+
+    public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
+    {
+        Vector2? target_pos;
+        float min_dist;
+        GetClosest(targets, out target_pos, out min_dist);
 
         if(target_pos != null)
         {
@@ -58,8 +62,21 @@ public class SteerComponent : MonoBehaviour
         return Vector2.zero;
     }
 
-    public Vector2 Evade(Vector2[] targets, float sight_radius, float forget_radius, Genes genes)
+    public Vector2 Evade(Vector2[] targets, float sight_radius, Genes genes)
     {
+        Vector2? target_pos;
+        float min_dist;
+        GetClosest(targets, out target_pos, out min_dist);
+
+        if(target_pos != null)
+        {
+            if(min_dist < sight_radius)
+            {
+                var steer = -GetSteer((Vector2)target_pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
+                Debug.Log("Steer = " + steer);
+                return steer;
+            }
+        }
         return Vector2.zero;
     }
 
@@ -67,11 +84,4 @@ public class SteerComponent : MonoBehaviour
     {
         m_RigidBody = GetComponent<Rigidbody2D>();
     }
-
-    // private void Update()
-    // {
-    //     Vector2 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     // Seek(new Vector2(10, 0), 10000);
-    //     Seek(mouse_pos, 100000);
-    // }
 }

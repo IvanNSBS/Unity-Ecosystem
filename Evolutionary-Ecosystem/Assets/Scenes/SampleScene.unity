@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 219777373}
   - component: {fileID: 219777378}
   - component: {fileID: 219777375}
+  - component: {fileID: 219777379}
   m_Layer: 0
   m_Name: Animal
   m_TagString: Untagged
@@ -200,11 +201,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723c4890490b9804c83ab5d59739135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SteerBehavior: {fileID: 219777378}
+  m_SteerBehavior: {fileID: 0}
   m_AgentGenes:
     m_MaxSpeed: 5
-    m_MaxForce: 0.2
-    m_MaxBrake: 3
+    m_MaxForce: 0.5
+    m_MaxBrake: 1
+    m_SightRadius: 2
+    m_ForgetRadius: 4
 --- !u!212 &219777376
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -280,6 +283,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba51150712be2b48874e6fd03e8ef27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &219777379
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219777372}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.37
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
