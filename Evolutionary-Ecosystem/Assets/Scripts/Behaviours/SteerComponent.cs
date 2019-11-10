@@ -6,7 +6,10 @@ public class SteerComponent : MonoBehaviour
     private Rigidbody2D m_RigidBody = null;
     private Vector2 GetPosition() { return this.gameObject.transform.position; }
     private Vector2 GetVelocity() { return m_RigidBody.velocity; }
-    public void ApplyForce(Vector2 force, float max_force) { m_RigidBody.velocity += force; m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity, max_force); }
+    public void ApplyForce(Vector2 force, float max_force) { 
+        m_RigidBody.velocity += force;
+        m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity, max_force);
+    }
 
     private Vector2 SetMagnitude(Vector2 vector, float magnitude){
         return vector.normalized * magnitude;

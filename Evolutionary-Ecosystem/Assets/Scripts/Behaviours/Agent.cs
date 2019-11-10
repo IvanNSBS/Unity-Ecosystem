@@ -25,8 +25,8 @@ public class Agent : MonoBehaviour {
 
     private void Explore()
     {
-        if(wander_point == null)
-            wander_point = new Vector2( Random.Range(-4.0f, 8.0f), Random.Range(0.0f, 4.0f) );
+        if(wander_point == null && !waiting)
+            wander_point = new Vector2( Random.Range(-5.7f, 5.7f), Random.Range(-3.6f, 3.6f) );
         
         Vector2[] pts = { (Vector2)wander_point };
         bool arrived = false;
@@ -34,14 +34,14 @@ public class Agent : MonoBehaviour {
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         if( arrived )
             wander_point = null;
-            // StartCoroutine( WaitAfterArrive(2.0f) );
+            // StartCoroutine( WaitAfterArrive(1.0f) );
     }
 
     private void SeekFood()
     {
         wander_point = null;
         bool arrived = false;
-        var steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.2f, m_AgentGenes, ref arrived);
+        var steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.1f, m_AgentGenes, ref arrived);
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }
 
