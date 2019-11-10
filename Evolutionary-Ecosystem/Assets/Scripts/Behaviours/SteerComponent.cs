@@ -23,14 +23,14 @@ public class SteerComponent : MonoBehaviour
             Vector2 steer = desired - GetVelocity();
             steer = Vector2.ClampMagnitude(steer, lerp ? genes.m_MaxBrake : genes.m_MaxForce );
 
-            Debug.Log(steer);
+            // Debug.Log(steer);
             return steer;
         }
 
         return Vector2.zero;
     }
     
-    public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes)
+    public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
     {
         Vector2? target_pos = null;
         float min_dist = Mathf.Infinity;
@@ -43,14 +43,23 @@ public class SteerComponent : MonoBehaviour
                 target_pos = target;
             }
         }
+
         if(target_pos != null)
         {
-            if(min_dist < arrive_tol)
-                return GetSteer((Vector2)target_pos, seek_tol, genes, lerp: true);
+            if(min_dist < arrive_tol){
+                var steer =  GetSteer((Vector2)target_pos, seek_tol, genes, lerp: true);
+                arrived = steer.magnitude <= 0.0001f;
+                return steer;
+            }
 
             return GetSteer((Vector2)target_pos, seek_tol, genes);
         }
 
+        return Vector2.zero;
+    }
+
+    public Vector2 Evade(Vector2[] targets, float sight_radius, float forget_radius, Genes genes)
+    {
         return Vector2.zero;
     }
 

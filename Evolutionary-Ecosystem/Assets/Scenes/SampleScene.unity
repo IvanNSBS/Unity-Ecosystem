@@ -202,8 +202,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SteerBehavior: {fileID: 219777378}
   m_AgentGenes:
-    m_MaxSpeed: 7
-    m_MaxForce: 0.8
+    m_MaxSpeed: 5
+    m_MaxForce: 0.2
+    m_MaxBrake: 3
 --- !u!212 &219777376
 SpriteRenderer:
   m_ObjectHideFlags: 0
