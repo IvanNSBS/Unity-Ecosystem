@@ -5,17 +5,23 @@ public class SteerComponent : MonoBehaviour
     private Rigidbody2D m_RigidBody = null;
     private Vector2 GetPosition() { return this.gameObject.transform.position; }
     private Vector2 GetVelocity() { return m_RigidBody.velocity; }
-    public void ApplyForce(Vector2 force) { m_RigidBody.velocity += force; }
-    public Vector2 GetSteer( Vector2 target_pos, float tolerance, Genes agent_genes )
+    public void ApplyForce(Vector2 force, float max_force) { m_RigidBody.velocity += force; m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity, max_force); }
+
+    private Vector2 SetMagnitude(Vector2 vector, float magnitude){
+        return vector.normalized * magnitude;
+    }
+    public Vector2 GetSteer( Vector2 target_pos, float tolerance, Genes genes, bool lerp=false )
     {
 
-        Vector2 desired = (target_pos - GetPosition()).normalized * agent_genes.m_MaxSpeed;
+        Vector2 desired = (target_pos - GetPosition()).normalized * genes.m_MaxSpeed;
         float distance = desired.magnitude;
 
         if(distance < tolerance)
         {
+            if(lerp)
+                desired = SetMagnitude(desired, genes.m_MaxSpeed*distance/tolerance);
             Vector2 steer = desired - GetVelocity();
-            steer = Vector2.ClampMagnitude(steer, agent_genes.m_MaxForce);
+            steer = Vector2.ClampMagnitude(steer, lerp ? genes.m_MaxBrake : genes.m_MaxForce );
 
             Debug.Log(steer);
             return steer;
@@ -24,7 +30,7 @@ public class SteerComponent : MonoBehaviour
         return Vector2.zero;
     }
     
-    public Vector2 Seek(Vector2[] targets, float tolerance, Genes genes)
+    public Vector2 SeekAndArrive(Vector2[] targets, float seek_tol, float arrive_tol, Genes genes)
     {
         Vector2? target_pos = null;
         float min_dist = Mathf.Infinity;
@@ -38,7 +44,12 @@ public class SteerComponent : MonoBehaviour
             }
         }
         if(target_pos != null)
-            return GetSteer((Vector2)target_pos, tolerance, genes);
+        {
+            if(min_dist < arrive_tol)
+                return GetSteer((Vector2)target_pos, seek_tol, genes, lerp: true);
+
+            return GetSteer((Vector2)target_pos, seek_tol, genes);
+        }
 
         return Vector2.zero;
     }

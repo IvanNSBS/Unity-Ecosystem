@@ -12,7 +12,7 @@ public class Agent : MonoBehaviour {
         Vector2 mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2[] targets = {mouse_pos};
         // Seek(new Vector2(10, 0), 10000);
-        var s = m_SteerBehavior.Seek(targets, 100000, m_AgentGenes);
-        m_SteerBehavior.ApplyForce(s);
+        var s = m_SteerBehavior.SeekAndArrive(targets, 100000, 0.35f, m_AgentGenes);
+        m_SteerBehavior.ApplyForce(s, m_AgentGenes.m_MaxSpeed);
     }
 }
