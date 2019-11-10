@@ -10,15 +10,20 @@ public class LifeComponent : MonoBehaviour {
     public float m_TimeToDeathByThirst = 80.0f;
     public float m_TotalHealth = 1.0f;
     public float m_TotalEnergy = 100.0f;
+    public float m_TotalReproductionUrge = 100.0f;
     public float m_RemainingLifetime;
     public float m_CurrentHealth, m_CurrentEnergy;
     public float m_CurrentHunger, m_CurrentThirst;
+    public float m_CurrentReproductionUrge;
+    [HideInInspector] public Genes m_AgentGenes;
     private void Start() {
         m_RigidBody = GetComponent<Rigidbody2D>();
+        m_AgentGenes = GetComponent<Agent>().m_AgentGenes;
         m_RemainingLifetime = m_LifeTime;
         m_CurrentHunger = 0;
         m_CurrentThirst = 0;
         m_CurrentEnergy = m_TotalEnergy;
+        m_CurrentReproductionUrge = 0;
     }
 
     private void Update() {

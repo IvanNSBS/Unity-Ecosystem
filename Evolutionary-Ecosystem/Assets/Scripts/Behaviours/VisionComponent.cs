@@ -31,9 +31,9 @@ public class VisionComponent : MonoBehaviour
                 obj_agent.visible_food.Add(other.gameObject);
         }
 
-        else if(!m_IsForget && !obj_agent.visible_predators.Contains(other.gameObject)){
+        else if(!m_IsForget && !obj_agent.visible_animals.Contains(other.gameObject)){
             // Debug.Log("Adding " + other.gameObject);
-            obj_agent.visible_predators.Add(other.gameObject);
+            obj_agent.visible_animals.Add(other.gameObject);
         }    
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -43,8 +43,8 @@ public class VisionComponent : MonoBehaviour
                 obj_agent.visible_food.Remove(other.gameObject);
         }
                 
-        else if(!m_IsForget && obj_agent.visible_predators.Contains(other.gameObject)){
-            obj_agent.visible_predators.Remove(other.gameObject);
+        else if(!m_IsForget && obj_agent.visible_animals.Contains(other.gameObject)){
+            obj_agent.visible_animals.Remove(other.gameObject);
         }
     }
 }

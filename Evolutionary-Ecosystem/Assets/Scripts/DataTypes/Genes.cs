@@ -12,6 +12,10 @@ public class Genes
     float[] m_Genes;
     bool m_IsMale;
 
+    public float m_CriticalThirst = 0.3f;
+    public float m_CriticalHunger = 0.2f;
+    public float m_CriticalEnergy = 0.35f;
+    public float m_CriticalUrge = 0.85f;
     // Genes()
     // {
     //     // m_IsMale = Random.Range(0.0f, 1.0f) < 0.5;
