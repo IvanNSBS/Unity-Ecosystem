@@ -23,6 +23,11 @@ public class AgentStateMachine
 
     public void DecideNextState()
     {
+        if( m_Owner.visible_predators.Count == 0 && 
+           (state == AgentState.Eating  || state == AgentState.Drinking ||
+            state == AgentState.Resting || state == AgentState.SearchingForMate) )
+            return;
+
         float hunger = m_Owner.m_LifeComponent.m_CurrentHunger;
         float thirst = m_Owner.m_LifeComponent.m_CurrentThirst;
         float urge = m_Owner.m_LifeComponent.m_CurrentReproductionUrge;
@@ -34,11 +39,12 @@ public class AgentStateMachine
         float energy_pct = energy/m_Owner.m_LifeComponent.m_TotalEnergy;
 
         // Priority = Flee --> DrinkWater -->  Eat --> Reproduce --> Rest
-        if(m_Owner.visible_predators.Count > 0)
-            state = AgentState.Fleeing;
-        if(thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst)
-            state = AgentState.GoingToWater;
-        else if(hunger_pct > 0.0f && m_Owner.visible_food.Count > 0)
+        // if(m_Owner.visible_predators.Count > 0)
+        //     state = AgentState.Fleeing;
+        // if(thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst)
+        //     state = AgentState.GoingToWater;
+        // else 
+        if(m_Owner.visible_food.Count > 0)
             state = AgentState.GoingToFood;
         else
             state = AgentState.Exploring;
@@ -68,7 +74,7 @@ public class AgentStateMachine
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore;
         // sum = steer_avoid;
-        sum = steer_seek;
+        // sum = steer_seek;
         return sum;
     }
 

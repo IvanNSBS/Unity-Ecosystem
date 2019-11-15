@@ -5,7 +5,7 @@ public class SteerComponent : MonoBehaviour
 {
     private Rigidbody2D m_RigidBody = null;
     private Vector2 GetPosition() { return this.gameObject.transform.position; }
-    private Vector2 GetVelocity() { return m_RigidBody.velocity; }
+    public Vector2 GetVelocity() { return m_RigidBody.velocity; }
     public void ApplyForce(Vector2 force, float max_force) { 
         m_RigidBody.velocity += force;
         m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity, max_force);
@@ -85,7 +85,7 @@ public class SteerComponent : MonoBehaviour
         return Vector2.zero;
     }
 
-    public Vector2 SeekAndArrive(ref List<GameObject> targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived)
+    public Vector2 SeekAndArrive(ref List<GameObject> targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived, ref GameObject seeked)
     {
         GameObject target_pos;
         float min_dist;
@@ -93,10 +93,11 @@ public class SteerComponent : MonoBehaviour
 
         if(target_pos != null)
         {
+            seeked = target_pos;
             Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
             if(min_dist < arrive_tol){
                 var steer =  GetSteer(pos, seek_tol, genes, lerp: true);
-                arrived = min_dist <= arrive_tol;
+                arrived = true;
                 targets.Remove(target_pos);
                 return steer;
             }

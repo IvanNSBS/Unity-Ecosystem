@@ -37,11 +37,15 @@ public class Agent : MonoBehaviour {
             wander_point = null;
         }
     }
-    private IEnumerator WaitNotReset(float wait_time)
+    private IEnumerator WaitSetState(float wait_time, AgentState nstate)
     {
         if(!waiting){
+            var oldstate = m_FSM.state;
             waiting = true;
+            m_FSM.state = nstate;
+
             yield return new WaitForSeconds(wait_time);
+            m_FSM.state = oldstate;
             waiting = false;
             wander_point = null;
         }
@@ -49,6 +53,8 @@ public class Agent : MonoBehaviour {
 
     public void Explore(ref Vector2 steer, ref bool arrived)
     {
+        if(waiting)
+            return;
         if(wander_point == null)
             wander_point = new Vector2( Random.Range(-5.7f, 5.7f), Random.Range(-3.6f, 3.6f) );
         
@@ -58,7 +64,6 @@ public class Agent : MonoBehaviour {
 
         if( arrived ){
             // wander_point = null;
-            Debug.Log("wander point is being set to null...");
             StartCoroutine( WaitAfterArrive(2.0f) );
         }
 
@@ -67,11 +72,16 @@ public class Agent : MonoBehaviour {
 
     public void SeekFood( ref Vector2 steer, ref bool arrived)
     {
+        if(waiting)
+            return;
+
         arrived = false;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius*2, 0.15f, m_AgentGenes, ref arrived);
+        GameObject found = null;
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.15f, m_AgentGenes, ref arrived, ref found);
         if(arrived){
-            Debug.Log("arrived at...");
-            StartCoroutine( WaitAfterArrive(2.0f) );
+            found.GetComponent<FoodData>().Eaten(gameObject);
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            StartCoroutine( WaitSetState(2.0f, AgentState.Eating));
         }
         // wander_point = null;
         // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
