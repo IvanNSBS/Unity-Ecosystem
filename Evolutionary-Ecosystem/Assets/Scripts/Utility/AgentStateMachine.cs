@@ -11,7 +11,7 @@ public class AgentStateMachine
     {
         m_Owner = owner;    
         m_SteerWeights.Add(AgentState.Fleeing, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.4f } );
-        m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 0.7f } );
+        m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 1.0f } );
         m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToNest, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
@@ -67,6 +67,7 @@ public class AgentStateMachine
         steer_seek *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore;
+        sum = steer_avoid;
         return sum;
     }
 

@@ -109,18 +109,25 @@ public class SteerComponent : MonoBehaviour
 
     public Vector2 Evade(List<GameObject> targets, float sight_radius, Genes genes)
     {
-        GameObject target_pos;
-        float min_dist;
-        GetClosest(ref targets, out target_pos, out min_dist);
-
-        if(target_pos != null)
+        Vector2 sum = Vector2.zero;
+        int count = 0;
+        foreach(var target in targets)
         {
-            Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
-            if(min_dist < sight_radius)
-            {
-                var steer = GetSteer(pos, sight_radius, genes).normalized * genes.m_MaxSpeed;
-                return -steer;
+            Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
+            float d = (GetPosition() - pos).magnitude;
+            if( d > 0 && d <= sight_radius){
+                Vector2 diff = (GetPosition() - pos).normalized;
+                diff /= d;
+                sum += diff;
+                count++;
             }
+        }
+        if(count > 0){
+            sum /= count;
+            sum = SetMagnitude(sum, genes.m_MaxSpeed);
+            Vector2 steer = sum - GetVelocity();
+            steer = Vector2.ClampMagnitude(steer, genes.m_MaxSpeed );   
+            return steer;
         }
         return Vector2.zero;
     }
