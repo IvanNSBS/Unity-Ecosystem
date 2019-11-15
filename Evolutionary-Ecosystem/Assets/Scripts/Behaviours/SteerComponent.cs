@@ -128,7 +128,6 @@ public class SteerComponent : MonoBehaviour
             sum = SetMagnitude(sum, genes.m_MaxSpeed);
             Vector2 steer = sum - GetVelocity();
             steer = Vector2.ClampMagnitude(steer, genes.m_MaxSpeed);   
-            Debug.Log("steer = " + steer);
             return steer;
         }
         return Vector2.zero;
