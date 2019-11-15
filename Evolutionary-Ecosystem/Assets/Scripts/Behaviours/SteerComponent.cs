@@ -96,7 +96,7 @@ public class SteerComponent : MonoBehaviour
             Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
             if(min_dist < arrive_tol){
                 var steer =  GetSteer(pos, seek_tol, genes, lerp: true);
-                arrived = steer.magnitude <= 0.0001f;
+                arrived = min_dist <= arrive_tol;
                 targets.Remove(target_pos);
                 return steer;
             }
@@ -127,7 +127,7 @@ public class SteerComponent : MonoBehaviour
             sum /= count;
             sum = SetMagnitude(sum, genes.m_MaxSpeed);
             Vector2 steer = sum - GetVelocity();
-            steer = Vector2.ClampMagnitude(steer, genes.m_MaxSpeed);   
+            steer = Vector2.ClampMagnitude(steer, genes.m_MaxForce);   
             return steer;
         }
         return Vector2.zero;

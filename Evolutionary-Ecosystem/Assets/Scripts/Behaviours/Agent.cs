@@ -37,6 +37,15 @@ public class Agent : MonoBehaviour {
             wander_point = null;
         }
     }
+    private IEnumerator WaitNotReset(float wait_time)
+    {
+        if(!waiting){
+            waiting = true;
+            yield return new WaitForSeconds(wait_time);
+            waiting = false;
+            wander_point = null;
+        }
+    }
 
     public void Explore(ref Vector2 steer, ref bool arrived)
     {
@@ -48,9 +57,9 @@ public class Agent : MonoBehaviour {
         steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
 
         if( arrived ){
-            wander_point = null;
-            // Debug.Log("wander point is being set to null...");
-            // StartCoroutine( WaitAfterArrive(1.0f) );
+            // wander_point = null;
+            Debug.Log("wander point is being set to null...");
+            StartCoroutine( WaitAfterArrive(2.0f) );
         }
 
         // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
@@ -59,8 +68,11 @@ public class Agent : MonoBehaviour {
     public void SeekFood( ref Vector2 steer, ref bool arrived)
     {
         arrived = false;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.1f, m_AgentGenes, ref arrived);
-
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius*2, 0.15f, m_AgentGenes, ref arrived);
+        if(arrived){
+            Debug.Log("arrived at...");
+            StartCoroutine( WaitAfterArrive(2.0f) );
+        }
         // wander_point = null;
         // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }

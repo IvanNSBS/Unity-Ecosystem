@@ -11,7 +11,7 @@ public class FoodData : MonoBehaviour {
     /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(!other.isTrigger)
-            Destroy(this.gameObject);
+        // if(!other.isTrigger)
+        //     Destroy(this.gameObject);
     }
 }

@@ -12,7 +12,7 @@ public class AgentStateMachine
         m_Owner = owner;    
         m_SteerWeights.Add(AgentState.Fleeing, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.4f } );
         m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 1.5f } );
-        m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
+        m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 0.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToNest, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.Eating, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
@@ -38,7 +38,7 @@ public class AgentStateMachine
             state = AgentState.Fleeing;
         if(thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst)
             state = AgentState.GoingToWater;
-        else if( hunger_pct >= m_Owner.m_AgentGenes.m_CriticalHunger)
+        else if(hunger_pct > 0.0f && m_Owner.visible_food.Count > 0)
             state = AgentState.GoingToFood;
         else
             state = AgentState.Exploring;
@@ -68,6 +68,7 @@ public class AgentStateMachine
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore;
         // sum = steer_avoid;
+        sum = steer_seek;
         return sum;
     }
 
