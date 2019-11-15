@@ -116,7 +116,8 @@ public class SteerComponent : MonoBehaviour
             Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
             float d = (GetPosition() - pos).magnitude;
             if( d > 0 && d <= sight_radius){
-                Vector2 diff = (GetPosition() - pos).normalized;
+                // Vector2 diff = (GetPosition() - pos).normalized;
+                Vector2 diff = -target.GetComponent<SteerComponent>().GetVelocity();
                 diff /= d;
                 sum += diff;
                 count++;
@@ -126,7 +127,8 @@ public class SteerComponent : MonoBehaviour
             sum /= count;
             sum = SetMagnitude(sum, genes.m_MaxSpeed);
             Vector2 steer = sum - GetVelocity();
-            steer = Vector2.ClampMagnitude(steer, genes.m_MaxSpeed );   
+            steer = Vector2.ClampMagnitude(steer, genes.m_MaxSpeed);   
+            Debug.Log("steer = " + steer);
             return steer;
         }
         return Vector2.zero;

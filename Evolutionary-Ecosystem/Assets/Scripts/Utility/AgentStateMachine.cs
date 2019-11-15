@@ -67,7 +67,7 @@ public class AgentStateMachine
         steer_seek *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore;
-        sum = steer_avoid;
+        // sum = steer_avoid;
         return sum;
     }
 
