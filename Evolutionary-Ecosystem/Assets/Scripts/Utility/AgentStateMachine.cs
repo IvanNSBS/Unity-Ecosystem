@@ -39,12 +39,11 @@ public class AgentStateMachine
         float energy_pct = energy/m_Owner.m_LifeComponent.m_TotalEnergy;
 
         // Priority = Flee --> DrinkWater -->  Eat --> Reproduce --> Rest
-        // if(m_Owner.visible_predators.Count > 0)
-        //     state = AgentState.Fleeing;
-        // if(thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst)
+        if(m_Owner.visible_predators.Count > 0)
+            state = AgentState.Fleeing;
+        // else if( thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst && m_Owner.visible_food.Count > 0)
         //     state = AgentState.GoingToWater;
-        // else 
-        if(m_Owner.visible_food.Count > 0)
+        else if(hunger_pct > 0.05f && m_Owner.visible_food.Count > 0)
             state = AgentState.GoingToFood;
         else
             state = AgentState.Exploring;

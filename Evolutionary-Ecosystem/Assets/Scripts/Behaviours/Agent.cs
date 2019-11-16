@@ -19,12 +19,33 @@ public class Agent : MonoBehaviour {
 
     private Vector2? wander_point = null;
 
+
+    private GameObject m_EatingFood = null, m_WaterDrinking = null;
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
         m_LifeComponent = GetComponent<LifeComponent>();
         m_FSM = new AgentStateMachine(this);
     }
 
+    private void ConsumeFood()
+    {
+        if(m_FSM.state != AgentState.Eating)
+            return;
+        if(m_LifeComponent.m_CurrentHunger/m_LifeComponent.m_TimeToDeathByHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
+            waiting = true;
+            m_EatingFood.GetComponent<FoodData>().Consume(gameObject, Time.deltaTime * 1.3f);
+        }
+        else{
+            m_FSM.state = AgentState.Exploring;
+            waiting = false;
+            m_EatingFood = null;
+        }
+    }
+
+    private void ConsumeWater()
+    {
+
+    }
 
     public void ResetWanderPoint() { wander_point = null; }
     private bool waiting = false;
@@ -55,6 +76,7 @@ public class Agent : MonoBehaviour {
     {
         if(waiting)
             return;
+
         if(wander_point == null)
             wander_point = new Vector2( Random.Range(-5.7f, 5.7f), Random.Range(-3.6f, 3.6f) );
         
@@ -66,8 +88,6 @@ public class Agent : MonoBehaviour {
             // wander_point = null;
             StartCoroutine( WaitAfterArrive(2.0f) );
         }
-
-        // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }
 
     public void SeekFood( ref Vector2 steer, ref bool arrived)
@@ -78,20 +98,19 @@ public class Agent : MonoBehaviour {
         arrived = false;
         GameObject found = null;
         steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.15f, m_AgentGenes, ref arrived, ref found);
-        if(arrived){
-            found.GetComponent<FoodData>().Eaten(gameObject);
+        if(arrived && m_FSM.state == AgentState.GoingToFood){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            StartCoroutine( WaitSetState(2.0f, AgentState.Eating));
+            m_EatingFood = found;
+            m_FSM.state = AgentState.Eating;
+            // while( m_LifeComponent.m_CurrentHunger/m_LifeComponent.m_TimeToDeathByHunger > m_AgentGenes.m_NotHungry && found != null)
+            // found.GetComponent<FoodData>().Consume(gameObject, 0.2f);
+            // StartCoroutine( WaitSetState(2.0f, AgentState.Eating));
         }
-        // wander_point = null;
-        // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }
 
     public void EvadeAgents( ref Vector2 steer)
     {
         steer = m_SteerBehavior.Evade(visible_animals, m_AgentGenes.m_SightRadius, m_AgentGenes);
-        // wander_point = null;
-        // m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
     }
 
     private void Update()
@@ -99,7 +118,7 @@ public class Agent : MonoBehaviour {
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
-
+        ConsumeFood();
 
 
         // Debug.Log("Update steer = " + steer);
