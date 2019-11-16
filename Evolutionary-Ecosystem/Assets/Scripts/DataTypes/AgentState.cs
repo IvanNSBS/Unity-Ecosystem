@@ -5,6 +5,7 @@ public enum AgentState {
     GoingToFood,
     GoingToNest,
     GoingToPartner,
+    WaitingForPartner,
     Eating,
     Drinking,
     Resting,
