@@ -21,6 +21,7 @@ public class Agent : MonoBehaviour {
 
 
     private GameObject m_EatingFood = null, m_WaterDrinking = null;
+    private GameObject m_MateTarget = null;
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
         m_LifeComponent = GetComponent<LifeComponent>();
@@ -58,19 +59,6 @@ public class Agent : MonoBehaviour {
             wander_point = null;
         }
     }
-    private IEnumerator WaitSetState(float wait_time, AgentState nstate)
-    {
-        if(!waiting){
-            var oldstate = m_FSM.state;
-            waiting = true;
-            m_FSM.state = nstate;
-
-            yield return new WaitForSeconds(wait_time);
-            m_FSM.state = oldstate;
-            waiting = false;
-            wander_point = null;
-        }
-    }
 
     public void Explore(ref Vector2 steer, ref bool arrived)
     {
@@ -85,7 +73,6 @@ public class Agent : MonoBehaviour {
         steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
 
         if( arrived ){
-            // wander_point = null;
             StartCoroutine( WaitAfterArrive(2.0f) );
         }
     }
@@ -102,9 +89,6 @@ public class Agent : MonoBehaviour {
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_EatingFood = found;
             m_FSM.state = AgentState.Eating;
-            // while( m_LifeComponent.m_CurrentHunger/m_LifeComponent.m_TimeToDeathByHunger > m_AgentGenes.m_NotHungry && found != null)
-            // found.GetComponent<FoodData>().Consume(gameObject, 0.2f);
-            // StartCoroutine( WaitSetState(2.0f, AgentState.Eating));
         }
     }
 
@@ -113,21 +97,84 @@ public class Agent : MonoBehaviour {
         steer = m_SteerBehavior.Evade(visible_animals, m_AgentGenes.m_SightRadius, m_AgentGenes);
     }
 
+    public void GoToMate(ref Vector2 steer, ref bool arrived)
+    {
+        arrived = false;
+        GameObject obj = null;
+        List<GameObject> mate = new List<GameObject>{ m_MateTarget };
+        steer = m_SteerBehavior.SeekAndArrive(ref mate, m_AgentGenes.m_SightRadius, 0.25f, m_AgentGenes, ref arrived, ref obj);
+        if(arrived){
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            m_FSM.state = AgentState.Reproducing;
+        }
+    }
+
+    public float m_ReproductionTime = 0.0f;
+    public void StartReproduction()
+    {
+        if(m_FSM.state != AgentState.Reproducing)
+            return;
+        else if(m_ReproductionTime < 3.0f){
+            waiting = true;
+            m_ReproductionTime += Time.deltaTime;
+        }
+        else{
+            m_FSM.state = AgentState.Exploring;
+            waiting = false;
+            m_MateTarget = null;
+            m_ReproductionTime = 0.0f;
+            Instantiate(this.gameObject);
+        }
+    }
+
+    public void ScanForPartner()
+    {
+        if(!m_AgentGenes.m_IsMale)
+            return;
+        if(m_MateTarget == null){
+            foreach(var potential_mate in visible_animals){
+                bool isFemale = !potential_mate.GetComponent<Agent>().m_AgentGenes.m_IsMale;
+                if(isFemale){
+                    PotentialMateFound(potential_mate);
+                    if(m_MateTarget != null){
+                        // GoToMate();
+                        break;
+                    }
+                }
+            }
+            if(m_MateTarget == null)
+                return;
+        }
+
+        Debug.Log("Mate was found!!!");
+        Vector2 steer = Vector2.zero;
+        bool arrived = false;
+        GoToMate(ref steer, ref arrived);
+        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
+    }
+    public void PotentialMateFound(GameObject female)
+    {
+        bool accepted = female.GetComponent<Agent>().RequestMate(gameObject);
+        if(accepted){
+            m_MateTarget = female;
+            m_FSM.state = AgentState.GoingToPartner;
+        }
+    }
+
+    public bool RequestMate(GameObject male)
+    {
+        m_MateTarget = male;
+        m_FSM.state = AgentState.GoingToPartner;
+        return true;
+    }
+
     private void Update()
     {
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         ConsumeFood();
-
-
-        // Debug.Log("Update steer = " + steer);
-        // Vector2 st = Vector2.zero; bool b = false;
-        // if(visible_food.Count == 0 && visible_predators.Count == 0)
-            // Explore(ref st, ref b);
-        // else if(visible_predators.Count == 0)
-        //     SeekFood();
-        // else
-        //     EvadeAgents();
+        ScanForPartner();
+        StartReproduction();
     }
 }

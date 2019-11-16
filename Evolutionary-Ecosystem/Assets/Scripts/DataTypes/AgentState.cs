@@ -4,9 +4,11 @@ public enum AgentState {
     GoingToWater,
     GoingToFood,
     GoingToNest,
+    GoingToPartner,
     Eating,
     Drinking,
     Resting,
     Fleeing,
-    SearchingForMate
+    SearchingForMate,
+    Reproducing,
 }

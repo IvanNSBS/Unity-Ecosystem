@@ -6,8 +6,8 @@ public class LifeComponent : MonoBehaviour {
     [HideInInspector] public Rigidbody2D m_RigidBody;
     [Header("Life Parameters")]
     public float m_LifeTime = 500.0f;
-    public float m_TimeToDeathByHunger = 150.0f;
-    public float m_TimeToDeathByThirst = 80.0f;
+    public float m_TimeToDeathByHunger = 250.0f;
+    public float m_TimeToDeathByThirst = 180.0f;
     public float m_TotalHealth = 1.0f;
     public float m_TotalEnergy = 100.0f;
     public float m_TotalReproductionUrge = 100.0f;
@@ -17,6 +17,7 @@ public class LifeComponent : MonoBehaviour {
     public float m_CurrentReproductionUrge;
     public float m_StomachSize = 10.0f;
     public float m_MaxDayFoodEnergy = 70.0f;
+    public float m_Weight = 1.0f, max_Weight = 15.0f, timeToGrow = 0.5f;
     [HideInInspector] public Genes m_AgentGenes;
     private void Start() {
         m_RigidBody = GetComponent<Rigidbody2D>();
@@ -31,9 +32,9 @@ public class LifeComponent : MonoBehaviour {
     private void Update() {
         m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
         m_CurrentEnergy -= Time.deltaTime*Mathf.Exp(m_RigidBody.velocity.magnitude)*m_EnergyUsage;
-        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger*150.0f;
-        m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst*8.0f;
-
+        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger;
+        m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
+        m_CurrentReproductionUrge += Time.deltaTime/m_TotalReproductionUrge;
 
         var sprite = GetComponent<SpriteRenderer>();
         sprite.color = Color.Lerp(Color.red, Color.green, m_RemainingLifetime/m_LifeTime);

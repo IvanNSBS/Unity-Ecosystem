@@ -15,17 +15,20 @@ public class AgentStateMachine
         m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 0.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToNest, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
+        m_SteerWeights.Add(AgentState.GoingToPartner, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.Eating, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.Drinking, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.Resting, new[]{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.SearchingForMate, new[]{1.0f, 0.0f, 0.0f, 1.0f, 0.7f});
+        m_SteerWeights.Add(AgentState.Reproducing, new[]{1.0f, 0.0f, 0.0f, 0.0f, 0.7f});
     }
 
     public void DecideNextState()
     {
         if( m_Owner.visible_predators.Count == 0 && 
            (state == AgentState.Eating  || state == AgentState.Drinking ||
-            state == AgentState.Resting || state == AgentState.SearchingForMate) )
+            state == AgentState.Resting || state == AgentState.SearchingForMate ||
+            state == AgentState.Reproducing || state == AgentState.GoingToPartner) )
             return;
 
         float hunger = m_Owner.m_LifeComponent.m_CurrentHunger;
