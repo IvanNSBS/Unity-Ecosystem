@@ -43,7 +43,7 @@ public class AgentStateMachine
             state = AgentState.Fleeing;
         // else if( thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst && m_Owner.visible_food.Count > 0)
         //     state = AgentState.GoingToWater;
-        else if(hunger_pct > 0.05f && m_Owner.visible_food.Count > 0)
+        else if(hunger_pct > m_Owner.m_AgentGenes.m_CriticalHunger && m_Owner.visible_food.Count > 0)
             state = AgentState.GoingToFood;
         else
             state = AgentState.Exploring;

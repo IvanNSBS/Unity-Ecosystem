@@ -31,7 +31,7 @@ public class LifeComponent : MonoBehaviour {
     private void Update() {
         m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
         m_CurrentEnergy -= Time.deltaTime*Mathf.Exp(m_RigidBody.velocity.magnitude)*m_EnergyUsage;
-        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger*10.0f;
+        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger*150.0f;
         m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst*8.0f;
 
 
