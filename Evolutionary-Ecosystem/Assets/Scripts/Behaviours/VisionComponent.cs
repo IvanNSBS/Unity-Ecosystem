@@ -18,11 +18,6 @@ public class VisionComponent : MonoBehaviour
         vision.isTrigger = true;
     }    
 
-    /// <summary>
-    /// Sent when another object enters a trigger collider attached to this
-    /// object (2D physics only).
-    /// </summary>
-    /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerEnter2D(Collider2D other)
     {
         var agent = other.gameObject.GetComponent<Agent>();
