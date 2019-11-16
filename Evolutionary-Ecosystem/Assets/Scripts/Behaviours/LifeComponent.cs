@@ -36,7 +36,5 @@ public class LifeComponent : MonoBehaviour {
         m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
         m_CurrentReproductionUrge += Time.deltaTime/m_TotalReproductionUrge;
 
-        var sprite = GetComponent<SpriteRenderer>();
-        sprite.color = Color.Lerp(Color.red, Color.green, m_RemainingLifetime/m_LifeTime);
     }
 }
