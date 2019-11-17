@@ -42,6 +42,8 @@ public class ObjectPooler : MonoBehaviour {
             Debug.LogWarning("Pool doesnt have this tag");
             return false;
         }
+
+        obj.SetActive(false);
         poolDict[tag].Enqueue(obj);
         return true;
     }
