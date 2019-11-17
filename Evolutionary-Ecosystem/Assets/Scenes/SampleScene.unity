@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1394096689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ PrefabInstance:
     - target: {fileID: 7443354811830918454, guid: f3758b7c9b1a6eb41b72799f58add5f1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.29
+      value: 1.17
       objectReference: {fileID: 0}
     - target: {fileID: 7443354811830918454, guid: f3758b7c9b1a6eb41b72799f58add5f1,
         type: 3}
@@ -368,6 +368,21 @@ PrefabInstance:
     - target: {fileID: 7443354811830918454, guid: f3758b7c9b1a6eb41b72799f58add5f1,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443354811830918408, guid: f3758b7c9b1a6eb41b72799f58add5f1,
+        type: 3}
+      propertyPath: materialColor.r
+      value: 0.7169812
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443354811830918408, guid: f3758b7c9b1a6eb41b72799f58add5f1,
+        type: 3}
+      propertyPath: materialColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443354811830918408, guid: f3758b7c9b1a6eb41b72799f58add5f1,
+        type: 3}
+      propertyPath: materialColor.b
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

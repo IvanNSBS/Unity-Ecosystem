@@ -12,6 +12,7 @@ public class Agent : MonoBehaviour {
     [Header("General Info")]
     public AgentDiet m_Diet = AgentDiet.Vegetal;
     public AgentStateMachine m_FSM;
+    public Color materialColor;
     [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
     public List<GameObject> visible_predators = new List<GameObject>();
@@ -27,7 +28,16 @@ public class Agent : MonoBehaviour {
     void Awake()
     {
         m_AgentGenes.RandomizeGenes();     
-        // m_AgentGenes = new Genes(1.0f);   
+        var sprite = GetComponent<SpriteRenderer>();
+        var mat = sprite.material;
+        if(m_AgentGenes.m_IsMale){
+            float g = (1.0f-m_AgentGenes.m_Desirabilty);
+            float r = 0.23f*g;
+            var color = new Color(0.7f-r, 0.43f*g, 0.0f, 1.0f);
+            mat.color = color;
+        }
+        else
+            mat.color = Color.gray;
     }
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
@@ -52,6 +62,17 @@ public class Agent : MonoBehaviour {
         m_WaterDrinking = null;
         m_MateTarget = null;
         m_reproducing = 0.0f;
+
+        var sprite = GetComponent<SpriteRenderer>();
+        var mat = sprite.material;
+        if(m_AgentGenes.m_IsMale){
+            float g = (1.0f-m_AgentGenes.m_Desirabilty);
+            float r = 0.23f*g;
+            var color = new Color(0.7f-r, 0.43f*g, 0.0f, 1.0f);
+            mat.color = color;
+        }
+        else
+            mat.color = Color.gray;
     }
 
     private void ConsumeFood()
