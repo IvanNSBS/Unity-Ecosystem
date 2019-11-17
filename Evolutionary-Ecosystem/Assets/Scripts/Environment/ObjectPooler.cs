@@ -36,6 +36,16 @@ public class ObjectPooler : MonoBehaviour {
         }
     }
 
+    public bool AddToPool(string tag, GameObject obj)
+    {
+        if(!poolDict.ContainsKey(tag)){
+            Debug.LogWarning("Pool doesnt have this tag");
+            return false;
+        }
+        poolDict[tag].Enqueue(obj);
+        return true;
+    }
+
     public GameObject SpawnFromPool(string tag, Vector3 pos)
     {
         if(!poolDict.ContainsKey(tag)){

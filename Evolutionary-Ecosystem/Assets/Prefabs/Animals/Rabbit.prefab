@@ -183,9 +183,12 @@ MonoBehaviour:
   m_FSM:
     state: 0
     m_Owner: {fileID: 0}
+  materialColor: {r: 0, g: 0, b: 0, a: 0}
+  tag: rabbit
   visible_food: []
   visible_predators: []
   visible_animals: []
+  unimpressed_females: []
   m_MateTarget: {fileID: 0}
   m_OffspringPrefab: {fileID: 7443354811830918411}
 --- !u!114 &1154815213046414806

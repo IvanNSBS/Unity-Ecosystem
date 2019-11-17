@@ -13,6 +13,7 @@ public class Agent : MonoBehaviour {
     public AgentDiet m_Diet = AgentDiet.Vegetal;
     public AgentStateMachine m_FSM;
     public Color materialColor;
+    public string tag;
     [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
     public List<GameObject> visible_predators = new List<GameObject>();
@@ -47,7 +48,10 @@ public class Agent : MonoBehaviour {
 
     public void Die(CauseOfDeath cause)
     {
+        //register death;
 
+        //add back to pool;
+        ObjectPooler.Instance.AddToPool(tag, gameObject);
     }
 
     public void ResetAgent()
@@ -122,7 +126,7 @@ public class Agent : MonoBehaviour {
         if(depth >= m_AgentGenes.m_MaxOffsprings)
             yield break;
         
-        ObjectPooler.Instance.SpawnFromPool("rabbit", gameObject.transform.position);
+        ObjectPooler.Instance.SpawnFromPool(tag, gameObject.transform.position);
         yield return new WaitForSeconds(0.75f);
         StartCoroutine(SpawnOffsprings(depth+1));
     }
