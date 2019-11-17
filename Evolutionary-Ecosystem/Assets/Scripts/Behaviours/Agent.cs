@@ -23,6 +23,12 @@ public class Agent : MonoBehaviour {
     public GameObject m_MateTarget = null;
     private float m_ReproductionTime = 2.0f;
     private float m_reproducing = 0.0f, m_gestating;
+
+    void Awake()
+    {
+        m_AgentGenes.RandomizeGenes();     
+        // m_AgentGenes = new Genes(1.0f);   
+    }
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
         m_LifeComponent = GetComponent<LifeComponent>();
@@ -55,6 +61,7 @@ public class Agent : MonoBehaviour {
             m_reproducing = 0.0f;
             m_FSM.state = AgentState.Exploring;
             m_MateTarget = null;
+            m_LifeComponent.m_CurrentReproductionUrge = Mathf.Clamp(m_LifeComponent.m_CurrentReproductionUrge-0.35f, 0.0f, 1.0f);
             if(!m_AgentGenes.m_IsMale)
                 StartCoroutine(Gestate());
         }
@@ -63,7 +70,6 @@ public class Agent : MonoBehaviour {
     IEnumerator Gestate()
     {
         m_gestating += Time.deltaTime;
-        Debug.Log("gestating... |= " + m_gestating);
         yield return new WaitForSeconds(Time.deltaTime);
         if(m_gestating >= m_AgentGenes.m_GestationDuration){
             StartCoroutine(SpawnOffsprings(0));
@@ -132,7 +138,7 @@ public class Agent : MonoBehaviour {
 
     public void EvadeAgents( ref Vector2 steer)
     {
-        steer = m_SteerBehavior.Evade(visible_animals, m_AgentGenes.m_SightRadius, m_AgentGenes);
+        steer = m_SteerBehavior.Evade(visible_animals, 0.8f, m_AgentGenes);
     }
 
     public void GoToMate(ref Vector2 steer, ref bool arrived)
@@ -151,6 +157,7 @@ public class Agent : MonoBehaviour {
         {
             foreach(var potential_mate in visible_animals)
             {
+                Debug.Log("scanning...");
                 bool isFemale = !potential_mate.GetComponent<Agent>().m_AgentGenes.m_IsMale;
                 if(isFemale){
                     if(PotentialMateFound(potential_mate))
@@ -158,6 +165,8 @@ public class Agent : MonoBehaviour {
                 }
             }
         }
+        else
+            Debug.Log("Partner is: " + m_MateTarget);
     }
 
     bool control = false;
@@ -187,7 +196,7 @@ public class Agent : MonoBehaviour {
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         ConsumeFood();
-        ScanForPartner();
-        Reproduce();
+        // ScanForPartner();
+        // Reproduce();
     }
 }
