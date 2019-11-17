@@ -41,5 +41,10 @@ public class LifeComponent : MonoBehaviour {
         m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
         m_CurrentReproductionUrge += Time.deltaTime/m_TotalReproductionUrge;
 
+        m_CurrentThirst = Mathf.Clamp01(m_CurrentThirst);
+        m_CurrentHunger = Mathf.Clamp01(m_CurrentHunger);
+        m_CurrentReproductionUrge = Mathf.Clamp01(m_CurrentReproductionUrge);
+        m_CurrentEnergy = Mathf.Clamp(m_CurrentEnergy, 0.0f, m_CurrentThirst);
+        
     }
 }
