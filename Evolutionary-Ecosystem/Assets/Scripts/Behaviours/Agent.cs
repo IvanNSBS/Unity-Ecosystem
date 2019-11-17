@@ -221,7 +221,7 @@ public class Agent : MonoBehaviour {
         }
         else{
             unimpressed_females.Add(female);
-
+            StartCoroutine(ForgetRegection(female));
         }
         return accepted;
     }
