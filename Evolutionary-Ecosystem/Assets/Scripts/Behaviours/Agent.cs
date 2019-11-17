@@ -18,11 +18,11 @@ public class Agent : MonoBehaviour {
     public List<GameObject> visible_animals = new List<GameObject>();
 
     private Vector2? wander_point = null;
-
     private GameObject m_EatingFood = null, m_WaterDrinking = null;
     public GameObject m_MateTarget = null;
     private float m_ReproductionTime = 2.0f;
     private float m_reproducing = 0.0f, m_gestating;
+    [SerializeField] private GameObject m_OffspringPrefab;
 
     void Awake()
     {
@@ -83,7 +83,7 @@ public class Agent : MonoBehaviour {
         if(depth >= m_AgentGenes.m_MaxOffsprings)
             yield break;
         
-        Instantiate(gameObject);
+        Instantiate(m_OffspringPrefab);
         yield return new WaitForSeconds(0.75f);
         StartCoroutine(SpawnOffsprings(depth+1));
     }
@@ -151,13 +151,13 @@ public class Agent : MonoBehaviour {
 
     public void ScanForPartner()
     {
-        if(!m_AgentGenes.m_IsMale)
+        if(!m_AgentGenes.m_IsMale){
             return;
+        }
         if(m_MateTarget == null)
         {
             foreach(var potential_mate in visible_animals)
             {
-                Debug.Log("scanning...");
                 bool isFemale = !potential_mate.GetComponent<Agent>().m_AgentGenes.m_IsMale;
                 if(isFemale){
                     if(PotentialMateFound(potential_mate))
@@ -165,8 +165,8 @@ public class Agent : MonoBehaviour {
                 }
             }
         }
-        else
-            Debug.Log("Partner is: " + m_MateTarget);
+        // else
+            // Debug.Log("Partner is: " + m_MateTarget);
     }
 
     bool control = false;
@@ -196,7 +196,7 @@ public class Agent : MonoBehaviour {
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
         ConsumeFood();
-        // ScanForPartner();
-        // Reproduce();
+        ScanForPartner();
+        Reproduce();
     }
 }

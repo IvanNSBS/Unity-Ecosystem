@@ -48,9 +48,7 @@ public class Genes
     public void RandomizeGenes()
     {
         random = new System.Random();
-        Debug.Log("Genes was constructed!!");
         var speed = Random.Range(0.3f, 1.3f);
-        Debug.Log("Speed was: " + speed);
         m_MaxSpeed = speed;
         m_MaxForce = Random.Range(0.4f, 1.0f);
         m_MaxBrake = 3*m_MaxForce;
@@ -62,7 +60,7 @@ public class Genes
         m_CriticalUrge = Random.Range(0.1f, 0.9f);
         m_Desirabilty = Random.Range(0.1f, 1.0f);
         m_GestationDuration = Random.Range(5.0f, 20.0f);
-        m_MaxOffsprings = Random.Range(0, 8);
+        m_MaxOffsprings = Random.Range(1, 1);
         m_Agression = Random.Range(0.0f, 1.0f); 
         m_Altruism = Random.Range(0.0f, 1.0f); 
     }

@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour {
     [SerializeField] private float m_ZoomSpeed = 0.5f;
     [HideInInspector] public Vector3 dragOrigin;
 
+    public GameObject prefab;
     private void MoveCamera()
     {
         if (Input.GetMouseButtonDown(1))
@@ -44,5 +45,10 @@ public class CameraController : MonoBehaviour {
         Zoom(-Input.mouseScrollDelta.y);
         MoveCamera();
         SelectObject();
+
+        
+        if(Input.GetKeyDown(KeyCode.D)){
+            Instantiate(prefab);
+        }
     }
 }

@@ -6,12 +6,9 @@ public class VisionComponent : MonoBehaviour
     Agent obj_agent;
     public bool m_IsForget = false;
     CircleCollider2D vision;
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
     void Start()
     {
+        Debug.Log("Adding Vision...");
         obj_agent = gameObject.GetComponent<Agent>();
         vision = gameObject.AddComponent<CircleCollider2D>();
         vision.radius = !m_IsForget ? obj_agent.m_AgentGenes.m_SightRadius : obj_agent.m_AgentGenes.m_ForgetRadius;
