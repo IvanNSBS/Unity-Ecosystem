@@ -15,8 +15,12 @@ public class Genes
     public float m_CriticalEnergy = 0.35f, m_NotTired = 0.85f;
     public float m_CriticalUrge = 0.85f;
     public float m_Desirabilty = 0.3f, m_GestationDuration = 20.0f;
+    public int m_MaxOffsprings = 5;
     public float m_Agression = 0.5f;
     public float m_Altruism = 0.5f;
+
+
+    
     // Genes()
     // {
     //     // m_IsMale = Random.Range(0.0f, 1.0f) < 0.5;

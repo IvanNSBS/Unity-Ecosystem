@@ -87,7 +87,7 @@ public class AgentStateMachine
         steer_avoid *= m_SteerWeights[state][GameplayStatics.w_avoid];
         steer_seek *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
         if(m_Owner.m_AgentGenes.m_IsMale){
-            Debug.Log("Steer reproduction = " + steer_reproduction);
+            // Debug.Log("Steer reproduction = " + steer_reproduction);
             steer_reproduction *= m_SteerWeights[state][GameplayStatics.w_matesearch];
         }
 

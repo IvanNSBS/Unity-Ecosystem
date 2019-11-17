@@ -19,11 +19,10 @@ public class Agent : MonoBehaviour {
 
     private Vector2? wander_point = null;
 
-
     private GameObject m_EatingFood = null, m_WaterDrinking = null;
     public GameObject m_MateTarget = null;
     private float m_ReproductionTime = 2.0f;
-    private float m_reproducing = 0.0f;
+    private float m_reproducing = 0.0f, m_gestating;
     private void Start() {
         m_SteerBehavior = GetComponent<SteerComponent>();
         m_LifeComponent = GetComponent<LifeComponent>();
@@ -57,10 +56,31 @@ public class Agent : MonoBehaviour {
             m_FSM.state = AgentState.Exploring;
             m_MateTarget = null;
             if(!m_AgentGenes.m_IsMale)
-                Instantiate(gameObject);
+                StartCoroutine(Gestate());
         }
     }
 
+    IEnumerator Gestate()
+    {
+        m_gestating += Time.deltaTime;
+        Debug.Log("gestating... |= " + m_gestating);
+        yield return new WaitForSeconds(Time.deltaTime);
+        if(m_gestating >= m_AgentGenes.m_GestationDuration){
+            StartCoroutine(SpawnOffsprings(0));
+            m_gestating = 0.0f;
+        }
+        else
+            StartCoroutine(Gestate());
+    }
+    IEnumerator SpawnOffsprings(int depth)
+    {
+        if(depth >= m_AgentGenes.m_MaxOffsprings)
+            yield break;
+        
+        Instantiate(gameObject);
+        yield return new WaitForSeconds(0.75f);
+        StartCoroutine(SpawnOffsprings(depth+1));
+    }
     private void ConsumeWater()
     {
 
