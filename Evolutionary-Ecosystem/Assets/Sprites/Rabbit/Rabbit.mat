@@ -98,6 +98,6 @@ Material:
     m_Colors:
     - Color_E5136AE9: {r: 0.5, g: 0.02521679, b: 0, a: 1}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _Color: {r: 0.7058824, g: 0.111829825, b: 0, a: 1}
+    - _Color: {r: 0.58, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

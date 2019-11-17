@@ -50,7 +50,7 @@ public class Genes
         random = new System.Random();
         var speed = Random.Range(0.3f, 1.3f);
         m_MaxSpeed = speed;
-        m_MaxForce = Random.Range(0.4f, 1.0f);
+        m_MaxForce = Random.Range(0.8f, 2.0f);
         m_MaxBrake = 3*m_MaxForce;
         m_SightRadius = Random.Range(0.5f, 3.0f);
         m_ForgetRadius = Random.Range(3f, 5.0f);

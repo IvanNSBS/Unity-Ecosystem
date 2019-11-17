@@ -119,6 +119,8 @@ public class SteerComponent : MonoBehaviour
             if( d > 0 && d <= sight_radius){
                 // Vector2 diff = (GetPosition() - pos).normalized;
                 Vector2 diff = -target.GetComponent<SteerComponent>().GetVelocity();
+                diff += GetPosition() - pos;
+                // diff.Normalize();
                 diff /= d;
                 sum += diff;
                 count++;

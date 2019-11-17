@@ -8,7 +8,6 @@ public class VisionComponent : MonoBehaviour
     CircleCollider2D vision;
     void Awake()
     {
-        Debug.Log("Adding Vision...");
         obj_agent = gameObject.GetComponent<Agent>();
         vision = gameObject.AddComponent<CircleCollider2D>();
         ResetVision();

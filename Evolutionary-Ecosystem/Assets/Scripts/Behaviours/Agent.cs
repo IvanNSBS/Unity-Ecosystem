@@ -99,6 +99,7 @@ public class Agent : MonoBehaviour {
         if(m_FSM.state != AgentState.Reproducing)
             return;
         
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         m_reproducing += Time.deltaTime;
         if(m_reproducing >= m_ReproductionTime){
             m_reproducing = 0.0f;
@@ -115,20 +116,20 @@ public class Agent : MonoBehaviour {
         m_gestating += Time.deltaTime;
         yield return new WaitForSeconds(Time.deltaTime);
         if(m_gestating >= m_AgentGenes.m_GestationDuration){
-            StartCoroutine(SpawnOffsprings(0));
+            StartCoroutine(SpawnOffsprings(0, Random.Range(1, m_AgentGenes.m_MaxOffsprings)));
             m_gestating = 0.0f;
         }
         else
             StartCoroutine(Gestate());
     }
-    IEnumerator SpawnOffsprings(int depth)
+    IEnumerator SpawnOffsprings(int cur_depth, int n_offsprings)
     {
-        if(depth >= m_AgentGenes.m_MaxOffsprings)
+        if(cur_depth >= n_offsprings)
             yield break;
         
         ObjectPooler.Instance.SpawnFromPool(tag, gameObject.transform.position);
         yield return new WaitForSeconds(0.75f);
-        StartCoroutine(SpawnOffsprings(depth+1));
+        StartCoroutine(SpawnOffsprings(cur_depth+1, n_offsprings));
     }
     private void ConsumeWater()
     {
@@ -181,7 +182,7 @@ public class Agent : MonoBehaviour {
 
     public void EvadeAgents( ref Vector2 steer)
     {
-        steer = m_SteerBehavior.Evade(visible_animals, 0.8f, m_AgentGenes);
+        steer = m_SteerBehavior.Evade(visible_animals, 0.75f, m_AgentGenes);
     }
 
     public void GoToMate(ref Vector2 steer, ref bool arrived)
@@ -189,7 +190,7 @@ public class Agent : MonoBehaviour {
         arrived = false;
         GameObject obj = null;
         List<GameObject> mate = new List<GameObject>{ m_MateTarget };
-        steer = m_SteerBehavior.SeekAndArrive(ref mate, m_AgentGenes.m_SightRadius, 0.25f, m_AgentGenes, ref arrived, ref obj);
+        steer = m_SteerBehavior.SeekAndArrive(ref mate, m_AgentGenes.m_SightRadius, 0.4f, m_AgentGenes, ref arrived, ref obj);
     }
 
     public void ScanForPartner()

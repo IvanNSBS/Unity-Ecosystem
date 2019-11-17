@@ -80,6 +80,10 @@ public class AgentStateMachine
         if(m_Owner.m_AgentGenes.m_IsMale)
             m_Owner.GoToMate(ref steer_reproduction, ref reproduction_arrive);
 
+        // if(steer_avoid.magnitude > 0.001f){
+        //     Debug.Log("sTEER AVOID = " + steer_avoid);
+        //     return steer_avoid;
+        // }
         // Debug.Log("State steer explore = " + steer_explore);
         // return steer_explore;
 
