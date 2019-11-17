@@ -16,7 +16,7 @@ public class Agent : MonoBehaviour {
     public List<GameObject> visible_food = new List<GameObject>();
     public List<GameObject> visible_predators = new List<GameObject>();
     public List<GameObject> visible_animals = new List<GameObject>();
-
+    public List<GameObject> unimpressed_females = new List<GameObject>();
     private Vector2? wander_point = null;
     private GameObject m_EatingFood = null, m_WaterDrinking = null;
     public GameObject m_MateTarget = null;
@@ -33,6 +33,25 @@ public class Agent : MonoBehaviour {
         m_SteerBehavior = GetComponent<SteerComponent>();
         m_LifeComponent = GetComponent<LifeComponent>();
         m_FSM = new AgentStateMachine(this);
+    }
+
+    public void Die(CauseOfDeath cause)
+    {
+
+    }
+
+    public void ResetAgent()
+    {
+        m_AgentGenes.RandomizeGenes();     
+        visible_food.Clear();
+        visible_predators.Clear();
+        visible_animals.Clear();
+        unimpressed_females.Clear();
+        wander_point = null;
+        m_EatingFood = null;
+        m_WaterDrinking = null;
+        m_MateTarget = null;
+        m_reproducing = 0.0f;
     }
 
     private void ConsumeFood()
@@ -57,7 +76,6 @@ public class Agent : MonoBehaviour {
         
         m_reproducing += Time.deltaTime;
         if(m_reproducing >= m_ReproductionTime){
-            control = true;
             m_reproducing = 0.0f;
             m_FSM.state = AgentState.Exploring;
             m_MateTarget = null;
@@ -83,7 +101,7 @@ public class Agent : MonoBehaviour {
         if(depth >= m_AgentGenes.m_MaxOffsprings)
             yield break;
         
-        Instantiate(m_OffspringPrefab);
+        ObjectPooler.Instance.SpawnFromPool("rabbit", gameObject.transform.position);
         yield return new WaitForSeconds(0.75f);
         StartCoroutine(SpawnOffsprings(depth+1));
     }
@@ -151,7 +169,7 @@ public class Agent : MonoBehaviour {
 
     public void ScanForPartner()
     {
-        if(!m_AgentGenes.m_IsMale){
+        if(!m_AgentGenes.m_IsMale || m_LifeComponent.m_CurrentReproductionUrge < m_AgentGenes.m_CriticalUrge){
             return;
         }
         if(m_MateTarget == null)
@@ -159,7 +177,7 @@ public class Agent : MonoBehaviour {
             foreach(var potential_mate in visible_animals)
             {
                 bool isFemale = !potential_mate.GetComponent<Agent>().m_AgentGenes.m_IsMale;
-                if(isFemale){
+                if(isFemale && !unimpressed_females.Contains(potential_mate)){
                     if(PotentialMateFound(potential_mate))
                         break;
                 }
@@ -169,22 +187,35 @@ public class Agent : MonoBehaviour {
             // Debug.Log("Partner is: " + m_MateTarget);
     }
 
-    bool control = false;
     public bool PotentialMateFound(GameObject female)
     {
-        if(control)
-            return false;
         bool accepted = female.GetComponent<Agent>().RequestMate(gameObject);
         if(accepted){
             m_MateTarget = female;
             m_FSM.state = AgentState.GoingToPartner;
-            control = true;
+        }
+        else{
+            unimpressed_females.Add(female);
+
         }
         return accepted;
     }
 
+    IEnumerator ForgetRegection(GameObject female)
+    {
+        yield return new WaitForSeconds(30.0f);
+        unimpressed_females.Remove(female);
+    }
+
     public bool RequestMate(GameObject male)
     {
+        if(m_LifeComponent.m_CurrentReproductionUrge < m_AgentGenes.m_CriticalUrge)
+            return false;
+        
+        float male_chance = male.GetComponent<Agent>().m_AgentGenes.m_Desirabilty;
+        float chance = Mathf.Lerp(0.1f, 1.0f, male_chance);
+        if(Random.Range(0.0f, 1.0f) > chance)
+            return false;
         m_MateTarget = male;
         m_FSM.state = AgentState.WaitingForPartner;
         return true;
@@ -192,6 +223,13 @@ public class Agent : MonoBehaviour {
 
     private void Update()
     {
+        if(m_LifeComponent.m_CurrentHunger >= 1.0f)
+            Die(CauseOfDeath.Hunger);
+        else if(m_LifeComponent.m_CurrentThirst >= 1.0f)
+            Die(CauseOfDeath.Thirst);
+        else if(m_LifeComponent.m_RemainingLifetime <= 0.0f)
+            Die(CauseOfDeath.Age);
+
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);

@@ -6,14 +6,19 @@ public class VisionComponent : MonoBehaviour
     Agent obj_agent;
     public bool m_IsForget = false;
     CircleCollider2D vision;
-    void Start()
+    void Awake()
     {
         Debug.Log("Adding Vision...");
         obj_agent = gameObject.GetComponent<Agent>();
         vision = gameObject.AddComponent<CircleCollider2D>();
+        ResetVision();
+    }    
+
+    public void ResetVision()
+    {
         vision.radius = !m_IsForget ? obj_agent.m_AgentGenes.m_SightRadius : obj_agent.m_AgentGenes.m_ForgetRadius;
         vision.isTrigger = true;
-    }    
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {

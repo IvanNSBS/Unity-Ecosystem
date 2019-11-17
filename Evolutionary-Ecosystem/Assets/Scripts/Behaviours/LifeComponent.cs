@@ -19,9 +19,14 @@ public class LifeComponent : MonoBehaviour {
     public float m_MaxDayFoodEnergy = 70.0f;
     public float m_Weight = 1.0f, max_Weight = 15.0f, timeToGrow = 0.5f;
     [HideInInspector] public Genes m_AgentGenes;
-    private void Start() {
+    private void Awake() {
         m_RigidBody = GetComponent<Rigidbody2D>();
         m_AgentGenes = GetComponent<Agent>().m_AgentGenes;
+        ResetLifeStatus();
+    }
+
+    public void ResetLifeStatus()
+    {
         m_RemainingLifetime = m_LifeTime;
         m_CurrentHunger = 0;
         m_CurrentThirst = 0;

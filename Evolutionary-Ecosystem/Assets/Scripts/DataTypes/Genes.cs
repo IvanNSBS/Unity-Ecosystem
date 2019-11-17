@@ -60,7 +60,7 @@ public class Genes
         m_CriticalUrge = Random.Range(0.1f, 0.9f);
         m_Desirabilty = Random.Range(0.1f, 1.0f);
         m_GestationDuration = Random.Range(5.0f, 20.0f);
-        m_MaxOffsprings = Random.Range(1, 1);
+        m_MaxOffsprings = Random.Range(1, 5);
         m_Agression = Random.Range(0.0f, 1.0f); 
         m_Altruism = Random.Range(0.0f, 1.0f); 
     }
