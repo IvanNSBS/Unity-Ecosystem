@@ -54,9 +54,12 @@ public class Agent : MonoBehaviour {
         ObjectPooler.Instance.AddToPool(tag, gameObject);
     }
 
-    public void ResetAgent()
+    public void ResetAgent(bool cross_over = false, Genes father = null, Genes mother = null)
     {
-        m_AgentGenes.RandomizeGenes();     
+        if(!cross_over)
+            m_AgentGenes.RandomizeGenes();
+        else
+            m_AgentGenes.CrossOver(father, mother);     
         visible_food.Clear();
         visible_predators.Clear();
         visible_animals.Clear();
@@ -104,32 +107,33 @@ public class Agent : MonoBehaviour {
         if(m_reproducing >= m_ReproductionTime){
             m_reproducing = 0.0f;
             m_FSM.state = AgentState.Exploring;
+            var father_genes = m_MateTarget.GetComponent<Agent>().m_AgentGenes;
             m_MateTarget = null;
             m_LifeComponent.m_CurrentReproductionUrge = Mathf.Clamp(m_LifeComponent.m_CurrentReproductionUrge-0.35f, 0.0f, 1.0f);
             if(!m_AgentGenes.m_IsMale)
-                StartCoroutine(Gestate());
+                StartCoroutine(Gestate(father_genes));
         }
     }
 
-    IEnumerator Gestate()
+    IEnumerator Gestate(Genes father)
     {
         m_gestating += Time.deltaTime;
         yield return new WaitForSeconds(Time.deltaTime);
         if(m_gestating >= m_AgentGenes.m_GestationDuration){
-            StartCoroutine(SpawnOffsprings(0, Random.Range(1, m_AgentGenes.m_MaxOffsprings)));
+            StartCoroutine(SpawnOffsprings(0, Random.Range(1, m_AgentGenes.m_MaxOffsprings), father));
             m_gestating = 0.0f;
         }
         else
-            StartCoroutine(Gestate());
+            StartCoroutine(Gestate(father));
     }
-    IEnumerator SpawnOffsprings(int cur_depth, int n_offsprings)
+    IEnumerator SpawnOffsprings(int cur_depth, int n_offsprings, Genes father)
     {
         if(cur_depth >= n_offsprings)
             yield break;
         
-        ObjectPooler.Instance.SpawnFromPool(tag, gameObject.transform.position);
+        ObjectPooler.Instance.SpawnFromPool(tag, gameObject.transform.position, father, m_AgentGenes);
         yield return new WaitForSeconds(0.75f);
-        StartCoroutine(SpawnOffsprings(cur_depth+1, n_offsprings));
+        StartCoroutine(SpawnOffsprings(cur_depth+1, n_offsprings, father));
     }
     private void ConsumeWater()
     {
@@ -258,7 +262,7 @@ public class Agent : MonoBehaviour {
 
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
-        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed);
+        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude);
         ConsumeFood();
         ScanForPartner();
         Reproduce();

@@ -48,7 +48,7 @@ public class ObjectPooler : MonoBehaviour {
         return true;
     }
 
-    public GameObject SpawnFromPool(string tag, Vector3 pos)
+    public GameObject SpawnFromPool(string tag, Vector3 pos, Genes father, Genes mother)
     {
         if(!poolDict.ContainsKey(tag)){
             Debug.LogWarning("Pool doesnt have this tag");
@@ -59,7 +59,7 @@ public class ObjectPooler : MonoBehaviour {
         var obj_agent = obj.GetComponent<Agent>();
         var obj_life = obj.GetComponent<LifeComponent>();
         var obj_vision = obj.GetComponent<VisionComponent>();
-        obj_agent.ResetAgent();
+        obj_agent.ResetAgent(true, father, mother);
         obj_life.ResetLifeStatus();
         obj_vision.ResetVision();
         obj.transform.position = pos;
