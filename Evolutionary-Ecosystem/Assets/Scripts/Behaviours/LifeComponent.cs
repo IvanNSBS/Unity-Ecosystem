@@ -18,6 +18,8 @@ public class LifeComponent : MonoBehaviour {
     public float m_StomachSize = 10.0f;
     public float m_MaxDayFoodEnergy = 70.0f;
     public float m_Weight = 1.0f, max_Weight = 15.0f, timeToGrow = 0.5f;
+    float timeToAdulthood = 40.0f;
+    float curTimeToAdulthood = 0.0f;
     [HideInInspector] public Genes m_AgentGenes;
     private void Awake() {
         m_RigidBody = GetComponent<Rigidbody2D>();
@@ -45,6 +47,6 @@ public class LifeComponent : MonoBehaviour {
         m_CurrentHunger = Mathf.Clamp01(m_CurrentHunger);
         m_CurrentReproductionUrge = Mathf.Clamp01(m_CurrentReproductionUrge);
         m_CurrentEnergy = Mathf.Clamp(m_CurrentEnergy, 0.0f, m_CurrentThirst);
-        
+        curTimeToAdulthood += Time.deltaTime/timeToAdulthood;
     }
 }
