@@ -142,6 +142,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5a3d3d7d4d40e4cb1daaf64525c201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nutrition: 100
-  usages: 0
+  m_nutrition: 0.05
   max_usages: 2

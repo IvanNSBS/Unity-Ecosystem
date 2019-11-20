@@ -37,9 +37,9 @@ public class AgentStateMachine
         float urge = m_Owner.m_LifeComponent.m_CurrentReproductionUrge;
         float energy = m_Owner.m_LifeComponent.m_CurrentEnergy;
 
-        float hunger_pct = hunger/m_Owner.m_LifeComponent.m_TimeToDeathByHunger;
-        float thirst_pct = thirst/m_Owner.m_LifeComponent.m_TimeToDeathByThirst;
-        float urge_pct = urge/m_Owner.m_LifeComponent.m_TotalReproductionUrge;
+        float hunger_pct = hunger;
+        float thirst_pct = thirst;
+        float urge_pct = urge;
         float energy_pct = energy/m_Owner.m_LifeComponent.m_TotalEnergy;
 
         // Priority = Flee --> DrinkWater -->  Eat --> Reproduce --> Rest

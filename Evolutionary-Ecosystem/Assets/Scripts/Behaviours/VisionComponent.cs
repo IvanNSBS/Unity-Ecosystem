@@ -23,20 +23,29 @@ public class VisionComponent : MonoBehaviour
     {
         var agent = other.gameObject.GetComponent<Agent>();
         if(!agent){
-            if(!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject))
-                obj_agent.visible_food.Add(other.gameObject);
+            var food = other.gameObject.GetComponent<FoodData>();
+            if(food){
+                if(!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject))
+                    obj_agent.visible_food.Add(other.gameObject);
+            }
+            else if(!m_IsForget && !obj_agent.visible_water.Contains(other.gameObject))
+                    obj_agent.visible_water.Add(other.gameObject);
         }
 
         else if(!m_IsForget && !obj_agent.visible_animals.Contains(other.gameObject) && !other.isTrigger){
-            // Debug.Log("Adding " + other.gameObject);
             obj_agent.visible_animals.Add(other.gameObject);
         }    
     }
     private void OnTriggerExit2D(Collider2D other) {
         var agent = other.gameObject.GetComponent<Agent>();
         if(!agent){
-            if(!m_IsForget && obj_agent.visible_food.Contains(other.gameObject))
-                obj_agent.visible_food.Remove(other.gameObject);
+            var food = other.gameObject.GetComponent<FoodData>();
+            if(food){
+                if(!m_IsForget && obj_agent.visible_food.Contains(other.gameObject))
+                    obj_agent.visible_food.Remove(other.gameObject);
+                else if(!m_IsForget && obj_agent.visible_water.Contains(other.gameObject))
+                    obj_agent.visible_water.Remove(other.gameObject);
+            }
         }
                 
         else if(!m_IsForget && obj_agent.visible_animals.Contains(other.gameObject) && !other.isTrigger){

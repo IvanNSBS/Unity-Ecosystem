@@ -16,6 +16,7 @@ public class Agent : MonoBehaviour {
     public string tag;
     [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
+    public List<GameObject> visible_water = new List<GameObject>();
     public List<GameObject> visible_predators = new List<GameObject>();
     public List<GameObject> visible_animals = new List<GameObject>();
     public List<GameObject> unimpressed_females = new List<GameObject>();
@@ -86,11 +87,15 @@ public class Agent : MonoBehaviour {
     {
         if(m_FSM.state != AgentState.Eating)
             return;
-        if(m_LifeComponent.m_CurrentHunger/m_LifeComponent.m_TimeToDeathByHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
+        if(m_LifeComponent.m_CurrentHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
+            Debug.Log("eating food = " + m_EatingFood);
+            Debug.Log("current hunger = " + m_LifeComponent.m_CurrentHunger + " || not hungry = " + m_AgentGenes.m_NotHungry);
             waiting = true;
-            m_EatingFood.GetComponent<FoodData>().Consume(gameObject, Time.deltaTime * 1.3f);
+            m_EatingFood.GetComponent<FoodData>().Consume(gameObject, Time.deltaTime);
         }
         else{
+            Debug.Log("NOT eating food = " + m_EatingFood);
+            Debug.Log("NOT current hunger = " + m_LifeComponent.m_CurrentHunger + " || not hungry = " + m_AgentGenes.m_NotHungry);
             m_FSM.state = AgentState.Exploring;
             waiting = false;
             m_EatingFood = null;
@@ -171,8 +176,9 @@ public class Agent : MonoBehaviour {
 
     public void SeekFood( ref Vector2 steer, ref bool arrived)
     {
-        if(waiting)
+        if(waiting){
             return;
+        }
 
         arrived = false;
         GameObject found = null;

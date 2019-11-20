@@ -20,31 +20,7 @@ public class Genes
     public float m_Altruism = 0.5f;
 
     private System.Random random;
-
-
-    // public Genes(float rng)
-    // {
-    //     random = new System.Random();
-    //     Debug.Log("Genes was constructed!!");
-    //     var speed = RandomInRange(0.3f, 1.3f);
-    //     Debug.Log("Speed was: " + speed);
-    //     m_MaxSpeed = speed;
-    //     m_MaxForce = RandomInRange(0.4f, 1.0f);
-    //     m_MaxBrake = 3*m_MaxForce;
-    //     m_SightRadius = RandomInRange(0.5f, 10.0f);
-    //     m_ForgetRadius = RandomInRange(3f, 15.0f);
-    //     m_IsMale = RandomInRange(0.0f, 1.0f) > 0.5f;
-    //     m_CriticalThirst = RandomInRange(0.1f, 0.85f);
-    //     m_CriticalHunger = RandomInRange(0.1f, 0.85f);
-    //     m_CriticalUrge = RandomInRange(0.1f, 0.9f);
-    //     m_Desirabilty = RandomInRange(0.1f, 1.0f);
-    //     m_GestationDuration = RandomInRange(5.0f, 20.0f);
-    //     m_MaxOffsprings = random.Next(0, 8);
-    //     m_Agression = RandomInRange(0.0f, 1.0f); 
-    //     m_Altruism = RandomInRange(0.0f, 1.0f); 
-    // }
-
-
+    private float mutChance = .2f;
     public void RandomizeGenes()
     {
         random = new System.Random();

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class FoodData : MonoBehaviour {
-    public float m_nutrition = 100.0f;
+    public float m_nutrition = 5.0f;
     private float usages;
     public float max_usages = 2;
     private Vector3 start_scale;
