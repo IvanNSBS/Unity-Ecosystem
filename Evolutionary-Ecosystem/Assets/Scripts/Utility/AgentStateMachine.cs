@@ -53,8 +53,8 @@ public class AgentStateMachine
                 state = AgentState.WaitingForPartner;
             }
         }
-        // else if( thirst_pct > hunger_pct && thirst_pct >= m_Owner.m_AgentGenes.m_CriticalThirst && m_Owner.visible_food.Count > 0)
-        //     state = AgentState.GoingToWater;
+        else if(thirst_pct > m_Owner.m_AgentGenes.m_CriticalThirst && m_Owner.visible_water.Count > 0)
+            state = AgentState.GoingToWater;
         else if(hunger_pct > m_Owner.m_AgentGenes.m_CriticalHunger && m_Owner.visible_food.Count > 0)
             state = AgentState.GoingToFood;
         else
@@ -67,16 +67,18 @@ public class AgentStateMachine
     public Vector2 GetStateSteer()
     {
         Vector2 steer_seek = Vector2.zero;
+        Vector2 steer_water = Vector2.zero;
         Vector2 steer_explore = Vector2.zero;
         Vector2 steer_avoid = Vector2.zero;
         Vector2 steer_reproduction = Vector2.zero;
 
-        bool explore_arrive = false, seek_arrive = false;
+        bool explore_arrive = false, seek_arrive = false, water_arrive = false;
         bool reproduction_arrive = false;
 
         m_Owner.EvadeAgents(ref steer_avoid);
         m_Owner.SeekFood(ref steer_seek, ref seek_arrive);
         m_Owner.Explore(ref steer_explore, ref explore_arrive);
+        m_Owner.SeekWater(ref steer_water, ref water_arrive);
         if(m_Owner.m_AgentGenes.m_IsMale)
             m_Owner.GoToMate(ref steer_reproduction, ref reproduction_arrive);
 
@@ -87,6 +89,7 @@ public class AgentStateMachine
         // Debug.Log("State steer explore = " + steer_explore);
         // return steer_explore;
 
+        steer_water *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
         steer_explore *= m_SteerWeights[state][GameplayStatics.w_exploring];
         steer_avoid *= m_SteerWeights[state][GameplayStatics.w_avoid];
         steer_seek *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
@@ -95,7 +98,7 @@ public class AgentStateMachine
             steer_reproduction *= m_SteerWeights[state][GameplayStatics.w_matesearch];
         }
 
-        Vector2 sum = steer_seek + steer_avoid + steer_explore + steer_reproduction;
+        Vector2 sum = steer_seek + steer_avoid + steer_explore + steer_reproduction + steer_water;
         if(state == AgentState.GoingToPartner && reproduction_arrive){
             state = AgentState.Reproducing;
             m_Owner.m_MateTarget.GetComponent<Agent>().m_FSM.state = AgentState.Reproducing;

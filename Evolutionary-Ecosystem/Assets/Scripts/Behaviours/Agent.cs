@@ -88,19 +88,30 @@ public class Agent : MonoBehaviour {
         if(m_FSM.state != AgentState.Eating)
             return;
         if(m_LifeComponent.m_CurrentHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
-            Debug.Log("eating food = " + m_EatingFood);
-            Debug.Log("current hunger = " + m_LifeComponent.m_CurrentHunger + " || not hungry = " + m_AgentGenes.m_NotHungry);
             waiting = true;
             m_EatingFood.GetComponent<FoodData>().Consume(gameObject, Time.deltaTime);
         }
         else{
-            Debug.Log("NOT eating food = " + m_EatingFood);
-            Debug.Log("NOT current hunger = " + m_LifeComponent.m_CurrentHunger + " || not hungry = " + m_AgentGenes.m_NotHungry);
             m_FSM.state = AgentState.Exploring;
             waiting = false;
             m_EatingFood = null;
         }
     }
+    private void ConsumeWater()
+    {
+        if(m_FSM.state != AgentState.Drinking)
+            return;
+        if(m_LifeComponent.m_CurrentThirst > m_AgentGenes.m_NotThirsty && m_WaterDrinking != null){
+            waiting = true;
+            m_WaterDrinking.GetComponent<WaterData>().Consume(gameObject, Time.deltaTime);
+        }
+        else{
+            m_FSM.state = AgentState.Exploring;
+            waiting = false;
+            m_WaterDrinking = null;
+        }
+    }
+
 
     private void Reproduce()
     {
@@ -139,10 +150,6 @@ public class Agent : MonoBehaviour {
         ObjectPooler.Instance.SpawnFromPool(tag, gameObject.transform.position, father, m_AgentGenes);
         yield return new WaitForSeconds(0.75f);
         StartCoroutine(SpawnOffsprings(cur_depth+1, n_offsprings, father));
-    }
-    private void ConsumeWater()
-    {
-
     }
 
     public void ResetWanderPoint() { wander_point = null; }
@@ -187,6 +194,21 @@ public class Agent : MonoBehaviour {
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_EatingFood = found;
             m_FSM.state = AgentState.Eating;
+        }
+    }
+    public void SeekWater(ref Vector2 steer, ref bool arrived)
+    {
+        if(waiting){
+            return;
+        }
+
+        arrived = false;
+        GameObject found = null;
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 0.15f, m_AgentGenes, ref arrived, ref found);
+        if(arrived && m_FSM.state == AgentState.GoingToWater){
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            m_WaterDrinking = found;
+            m_FSM.state = AgentState.Drinking;
         }
     }
 
@@ -270,6 +292,7 @@ public class Agent : MonoBehaviour {
         var steer = m_FSM.GetStateSteer();
         m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude);
         ConsumeFood();
+        ConsumeWater();
         ScanForPartner();
         Reproduce();
     }
