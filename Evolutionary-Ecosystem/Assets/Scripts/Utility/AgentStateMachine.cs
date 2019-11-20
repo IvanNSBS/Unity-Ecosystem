@@ -13,7 +13,7 @@ public class AgentStateMachine
         m_SteerWeights.Add(AgentState.Fleeing, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.4f } );
         m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 1.5f } );
         m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 0.0f, 1.0f, 1.0f, 0.7f } );
-        m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 1.0f, 1.0f, 1.0f, 0.7f } );
+        m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 0.0f, 1.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToNest, new[]{ 1.0f, 1.0f, 1.0f, 0.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.GoingToPartner, new[]{ 1.0f, 0.0f, 0.0f, 1.0f, 0.7f } );
         m_SteerWeights.Add(AgentState.WaitingForPartner, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
@@ -82,23 +82,22 @@ public class AgentStateMachine
         if(m_Owner.m_AgentGenes.m_IsMale)
             m_Owner.GoToMate(ref steer_reproduction, ref reproduction_arrive);
 
-        // if(steer_avoid.magnitude > 0.001f){
-        //     Debug.Log("sTEER AVOID = " + steer_avoid);
-        //     return steer_avoid;
-        // }
-        // Debug.Log("State steer explore = " + steer_explore);
-        // return steer_explore;
-
         steer_water *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
         steer_explore *= m_SteerWeights[state][GameplayStatics.w_exploring];
         steer_avoid *= m_SteerWeights[state][GameplayStatics.w_avoid];
         steer_seek *= m_SteerWeights[state][GameplayStatics.w_resourcesearch];
         if(m_Owner.m_AgentGenes.m_IsMale){
-            // Debug.Log("Steer reproduction = " + steer_reproduction);
             steer_reproduction *= m_SteerWeights[state][GameplayStatics.w_matesearch];
         }
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore + steer_reproduction + steer_water;
+        if(state == AgentState.GoingToWater){
+            Debug.Log("seek food = " + steer_seek );
+            Debug.Log("seek water = " + steer_water );
+            Debug.Log("avoid = " + steer_avoid );
+            Debug.Log("explore = " + steer_explore );
+            Debug.Log("reproduction = " + steer_reproduction );
+        }
         if(state == AgentState.GoingToPartner && reproduction_arrive){
             state = AgentState.Reproducing;
             m_Owner.m_MateTarget.GetComponent<Agent>().m_FSM.state = AgentState.Reproducing;
