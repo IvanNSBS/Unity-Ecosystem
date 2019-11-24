@@ -13,6 +13,7 @@ public class Agent : MonoBehaviour {
     public AgentDiet m_Diet = AgentDiet.Vegetal;
     public AgentStateMachine m_FSM;
     public Color materialColor;
+    [SerializeField] AnimalGenesRanges genes_ranges;
     public string tag;
     [Header("Vision Parameters")]
     public List<GameObject> visible_food = new List<GameObject>();
@@ -29,7 +30,7 @@ public class Agent : MonoBehaviour {
 
     void Awake()
     {
-        m_AgentGenes.RandomizeGenes();     
+        m_AgentGenes.RandomizeGenes(genes_ranges);     
         var sprite = GetComponent<SpriteRenderer>();
         var mat = sprite.material;
         if(m_AgentGenes.m_IsMale){
@@ -58,7 +59,7 @@ public class Agent : MonoBehaviour {
     public void ResetAgent(bool cross_over = false, Genes father = null, Genes mother = null)
     {
         if(!cross_over)
-            m_AgentGenes.RandomizeGenes();
+            m_AgentGenes.RandomizeGenes(genes_ranges);
         else
             m_AgentGenes.CrossOver(father, mother);     
         visible_food.Clear();
@@ -89,7 +90,15 @@ public class Agent : MonoBehaviour {
             return;
         if(m_LifeComponent.m_CurrentHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
             waiting = true;
-            m_EatingFood.GetComponent<FoodData>().Consume(gameObject, Time.deltaTime);
+            var food_data = m_EatingFood.GetComponent<FoodData>();
+            if(food_data)
+                food_data.Consume(gameObject, Time.deltaTime);
+            else{
+                Debug.Log("eating prey!!");
+                m_LifeComponent.m_CurrentHunger -= 0.25f;
+                m_EatingFood.GetComponent<Agent>().Die(CauseOfDeath.Eaten);
+            }
+
         }
         else{
             m_FSM.state = AgentState.Exploring;
@@ -214,7 +223,7 @@ public class Agent : MonoBehaviour {
 
     public void EvadeAgents( ref Vector2 steer)
     {
-        steer = m_SteerBehavior.Evade(visible_animals, 0.75f, m_AgentGenes);
+        steer = m_SteerBehavior.Evade(visible_predators, m_AgentGenes.m_SightRadius, m_AgentGenes);
     }
 
     public void GoToMate(ref Vector2 steer, ref bool arrived)

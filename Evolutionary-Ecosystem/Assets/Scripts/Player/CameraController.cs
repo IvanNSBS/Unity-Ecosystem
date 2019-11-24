@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour {
         Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
         Vector3 move = new Vector3(pos.x * m_CameraSpeed, pos.y * m_CameraSpeed, 0) * Time.deltaTime;
  
-        transform.Translate(move, Space.World); 
+        transform.Translate(-move, Space.World); 
     }
 
     private void Zoom(float zoomAmnt)

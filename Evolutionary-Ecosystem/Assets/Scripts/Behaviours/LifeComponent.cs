@@ -18,9 +18,11 @@ public class LifeComponent : MonoBehaviour {
     public float m_StomachSize = 10.0f;
     public float m_MaxDayFoodEnergy = 70.0f;
     public float m_Weight = 1.0f, max_Weight = 15.0f, timeToGrow = 0.5f;
-    float timeToAdulthood = 10.0f;
+    float timeToAdulthood = 50.0f;
     public float curTimeToAdulthood = 0.0f;
     [HideInInspector] public Genes m_AgentGenes;
+
+    public void SubtractTimeToAdulthood(float val) { timeToAdulthood-=val; }
     private void Awake() {
         m_RigidBody = GetComponent<Rigidbody2D>();
         m_AgentGenes = GetComponent<Agent>().m_AgentGenes;
@@ -34,6 +36,7 @@ public class LifeComponent : MonoBehaviour {
         m_CurrentThirst = 0;
         m_CurrentEnergy = m_TotalEnergy;
         m_CurrentReproductionUrge = 0;
+        timeToAdulthood -= m_AgentGenes.m_GestationDuration;
     }
 
     Vector3 pointsix = new Vector3(0.6f, 0.6f, 0.6f);
