@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbc91e33223fdf419b44abe1412aa76, type: 3}
+  m_Name: RabbitGenesRanges
+  m_EditorClassIdentifier: 
+  max_offsprings: 8
+  min_gestation_duration: 5
+  max_gestation_duration: 20
+  min_sight_range: 0.3
+  max_sight_range: 3
+  min_forget_range: 2
+  max_forget_range: 5
+  min_speed: 0.3
+  max_speed: 1.3
+  min_force: 0.8
+  max_force: 2
