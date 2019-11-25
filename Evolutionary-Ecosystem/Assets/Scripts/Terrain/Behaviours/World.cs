@@ -12,6 +12,7 @@ public class World : MonoBehaviour
     public int height;
     public WorldTile[,] tiles;
     public Material material;
+    public GameObject WaterPrefab;
 
     [Header("Noise Settings")]
     public string seed;
@@ -24,15 +25,12 @@ public class World : MonoBehaviour
 
     [Header("Heights Settings")]
     public float seaLevel;
-    public float beachStartHeight;
-    public float beachEndHeight;
-    public float grassStartHeight;
-    public float grassEndHeight;
     public float dirtStartHeight;
     public float dirtEndHeight;
-    public float stoneStartHeight;
-    public float stoneEndHeight;
-
+    public float grassStartHeight;
+    public float grassEndHeight;
+    public float highGrassStartHeight;
+    public float highGrassEndHeight;
 
     void Awake()
     {
@@ -72,6 +70,8 @@ public class World : MonoBehaviour
                 tiles[i, j] = MakeTileAtHeight(noiseValues[i, j]);
             }
         }
+
+        SpawnWaterPrefab();
     }
 
     WorldTile MakeTileAtHeight (float currentHeight)
@@ -79,17 +79,14 @@ public class World : MonoBehaviour
         if (currentHeight <= seaLevel)
             return new WorldTile(WorldTile.Type.Water);
 
-        if (currentHeight >= beachStartHeight && currentHeight <= beachEndHeight)
-            return new WorldTile(WorldTile.Type.Sand);
-
         if (currentHeight >= grassStartHeight && currentHeight <= grassEndHeight)
             return new WorldTile(WorldTile.Type.Grass);
 
+        if (currentHeight >= highGrassStartHeight && currentHeight <= highGrassEndHeight)
+            return new WorldTile(WorldTile.Type.HighGrass);
+
         if (currentHeight >= dirtStartHeight && currentHeight <= dirtEndHeight)
             return new WorldTile(WorldTile.Type.Dirt);
-
-        if (currentHeight >= stoneStartHeight && currentHeight <= stoneEndHeight)
-            return new WorldTile(WorldTile.Type.Stone);
 
         return new WorldTile(WorldTile.Type.Void);
     }
@@ -150,5 +147,21 @@ public class World : MonoBehaviour
             return null;
         }
         return tiles[x, y];
+    }
+
+    void SpawnWaterPrefab()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (tiles[i, j].type == WorldTile.Type.Water)
+                {
+                    Vector3 position = new Vector3(i + 0.5f, j + 0.5f, 0);
+                    GameObject go = Instantiate(WaterPrefab, position,Quaternion.identity);
+                    go.transform.SetParent(this.gameObject.transform);
+                }
+            }
+        }
     }
 }

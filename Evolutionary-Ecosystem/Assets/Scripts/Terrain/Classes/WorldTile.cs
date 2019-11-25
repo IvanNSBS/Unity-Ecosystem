@@ -10,6 +10,7 @@ public class WorldTile
     {
         Dirt,
         Grass,
+        HighGrass,
         Sand,
         Water,
         Stone,
