@@ -39,7 +39,7 @@ public class LifeComponent : MonoBehaviour {
         timeToAdulthood -= m_AgentGenes.m_GestationDuration;
     }
 
-    Vector3 pointsix = new Vector3(0.6f, 0.6f, 0.6f);
+    Vector3 pointsix = new Vector3(0.3f, 0.3f, 0.3f);
     private void Update() {
         m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
         m_CurrentEnergy -= Time.deltaTime*Mathf.Exp(m_RigidBody.velocity.magnitude)*m_EnergyUsage;
