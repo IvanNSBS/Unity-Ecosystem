@@ -223,7 +223,7 @@ public class Agent : MonoBehaviour {
 
     public void EvadeAgents( ref Vector2 steer)
     {
-        steer = m_SteerBehavior.Evade(visible_predators, m_AgentGenes.m_SightRadius, m_AgentGenes);
+        steer = m_SteerBehavior.Evade(visible_predators, m_AgentGenes.m_ForgetRadius, m_AgentGenes);
     }
 
     public void GoToMate(ref Vector2 steer, ref bool arrived)

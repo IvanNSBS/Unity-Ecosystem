@@ -6,7 +6,7 @@ public class VisionComponent : MonoBehaviour
     Agent obj_agent;
     public bool m_IsForget = false;
     CircleCollider2D vision;
-    void Awake()
+    void Start()
     {
         obj_agent = gameObject.GetComponent<Agent>();
         vision = gameObject.AddComponent<CircleCollider2D>();
@@ -15,6 +15,7 @@ public class VisionComponent : MonoBehaviour
 
     public void ResetVision()
     {
+        var radius = 
         vision.radius = !m_IsForget ? obj_agent.m_AgentGenes.m_SightRadius : obj_agent.m_AgentGenes.m_ForgetRadius;
         vision.isTrigger = true;
     }
@@ -36,7 +37,7 @@ public class VisionComponent : MonoBehaviour
             if(obj_agent.m_Diet == AgentDiet.Vegetal){
                 if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_animals.Contains(other.gameObject))
                     obj_agent.visible_animals.Add(other.gameObject);
-                else
+                else if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_predators.Contains(other.gameObject))
                     obj_agent.visible_predators.Add(other.gameObject);
             } 
             else if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_food.Contains(other.gameObject)){
@@ -60,12 +61,16 @@ public class VisionComponent : MonoBehaviour
             if(obj_agent.m_Diet == AgentDiet.Vegetal){
                 if(agent.m_Diet == AgentDiet.Vegetal && obj_agent.visible_animals.Contains(other.gameObject))
                     obj_agent.visible_animals.Remove(other.gameObject);
-                else
-                    obj_agent.visible_predators.Remove(other.gameObject);
+                // else
+                //     obj_agent.visible_predators.Remove(other.gameObject);
             } 
             else if(agent.m_Diet == AgentDiet.Vegetal && obj_agent.visible_food.Contains(other.gameObject)){
                 obj_agent.visible_food.Remove(other.gameObject);
             }
+        }
+        else if(m_IsForget && !other.isTrigger){
+            if(agent.m_Diet == AgentDiet.SmallerAnimals && obj_agent.visible_predators.Contains(other.gameObject))
+                obj_agent.visible_predators.Remove(other.gameObject);
         }  
     }
 }
