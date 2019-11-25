@@ -53,6 +53,7 @@ public class Agent : MonoBehaviour {
         //register death;
 
         //add back to pool;
+        // gameObject.SetActive(false);
         ObjectPooler.Instance.AddToPool(tag, gameObject);
     }
 
@@ -94,9 +95,10 @@ public class Agent : MonoBehaviour {
             if(food_data)
                 food_data.Consume(gameObject, Time.deltaTime);
             else{
-                Debug.Log("eating prey!!");
+                // Debug.Log("eating prey!!");
                 m_LifeComponent.m_CurrentHunger -= 0.25f;
                 m_EatingFood.GetComponent<Agent>().Die(CauseOfDeath.Eaten);
+                m_EatingFood = null;
             }
 
         }
@@ -198,7 +200,7 @@ public class Agent : MonoBehaviour {
 
         arrived = false;
         GameObject found = null;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.15f, m_AgentGenes, ref arrived, ref found);
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.35f, m_AgentGenes, ref arrived, ref found);
         if(arrived && m_FSM.state == AgentState.GoingToFood){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_EatingFood = found;
