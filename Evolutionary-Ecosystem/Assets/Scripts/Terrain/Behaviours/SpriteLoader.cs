@@ -12,7 +12,7 @@ public class SpriteLoader : MonoBehaviour
     {
         instance = this;
         tileUVMap = new Dictionary<string, Vector2[]>();
-        Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites");
+        Sprite[] sprites = Resources.LoadAll<Sprite>("New Sprites");
 
         float imageWidth = 0f;
         float imageHeight = 0f;
@@ -38,18 +38,19 @@ public class SpriteLoader : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public Vector2[] GetTileUVs(WorldTile tile)
     {
         string key = tile.type.ToString();
 
-        if(tileUVMap.ContainsKey(key) == true)
+        if (tileUVMap.ContainsKey(key) == true)
         {
+            if (tile.type == WorldTile.Type.Water)
+            {
+                int random = Random.Range(0, 2);
+                if (random != 0)
+                    key = key + random.ToString();
+                Debug.Log(key);
+            }
             return tileUVMap[key];
         }
         else
