@@ -168,6 +168,10 @@ MonoBehaviour:
   grassEndHeight: 0.75
   highGrassStartHeight: 0.75
   highGrassEndHeight: 1
+  m_InitialAmount: 20
+  m_SpawnPct: 0.025
+  m_FoodPrefab: {fileID: 7706643614276787505, guid: c1541cbbc41c3d44d82033e84ea9b9c5,
+    type: 3}
 --- !u!4 &88608009
 Transform:
   m_ObjectHideFlags: 0
@@ -193,6 +197,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 369776257001041423, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 369776257001041651, guid: 6740621eedcfb194fbcf2cbba4d36e93,
         type: 3}

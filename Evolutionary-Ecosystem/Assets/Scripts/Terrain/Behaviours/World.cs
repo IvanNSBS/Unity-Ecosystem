@@ -32,6 +32,11 @@ public class World : MonoBehaviour
     public float highGrassStartHeight;
     public float highGrassEndHeight;
 
+    [Header("Food Settings")]
+    public int m_InitialAmount = 20;
+    public float m_SpawnPct = 0.05f;
+    public GameObject m_FoodPrefab;
+
     void Awake()
     {
         instance = this;
@@ -50,12 +55,35 @@ public class World : MonoBehaviour
     {
         CreateTiles();
         SubdivideTilesArray();
+        for (int i = 0; i < m_InitialAmount; i++)
+        {
+            int foodX, foodY;
+            do
+            {
+                foodX = Random.Range(0, width + 1);
+                foodY = Random.Range(0, height + 1);
+
+            } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
+            var obj = Instantiate(m_FoodPrefab);
+            obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Random.Range(0.0f, 1.0f) < m_SpawnPct)
+        {
+            int foodX, foodY;
+            do
+            {
+                foodX = Random.Range(0, width + 1);
+                foodY = Random.Range(0, height + 1);
+
+            } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
+            var obj = Instantiate(m_FoodPrefab);
+            obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+        }
     }
 
     void CreateTiles()
