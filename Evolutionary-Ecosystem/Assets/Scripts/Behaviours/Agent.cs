@@ -180,15 +180,18 @@ public class Agent : MonoBehaviour {
         if(waiting)
             return;
 
-        if(wander_point == null)
-            wander_point = new Vector2( Random.Range(-5.7f, 5.7f), Random.Range(-3.6f, 3.6f) );
+        if(wander_point == null){
+
+            Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 2.0f);
+            wander_point = this.transform.position + r_point;
+        }
         
         Vector2[] pts = { (Vector2)wander_point };
         arrived = false;
         steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
 
         if( arrived ){
-            StartCoroutine( WaitAfterArrive(2.0f) );
+            StartCoroutine( WaitAfterArrive(1.2f) );
         }
     }
 
