@@ -50,18 +50,18 @@ public class LifeComponent : MonoBehaviour {
 
     Vector3 pointsix = new Vector3(0.3f, 0.3f, 0.3f);
     private void Update() {
-        m_RemainingLifetime -= Time.deltaTime/m_LifeTime;
-        m_CurrentEnergy -= Time.deltaTime*Mathf.Exp(m_RigidBody.velocity.magnitude)*m_EnergyUsage;
-        m_CurrentHunger += Time.deltaTime/m_TimeToDeathByHunger;
-        m_CurrentThirst += Time.deltaTime/m_TimeToDeathByThirst;
-        m_CurrentReproductionUrge += Time.deltaTime/m_TotalReproductionUrge;
+        m_RemainingLifetime -= (Time.deltaTime*Time.timeScale)/m_LifeTime;
+        m_CurrentEnergy -= (Time.deltaTime*Time.timeScale)*Mathf.Exp(m_RigidBody.velocity.magnitude)*m_EnergyUsage;
+        m_CurrentHunger += (Time.deltaTime*Time.timeScale)/m_TimeToDeathByHunger;
+        m_CurrentThirst += (Time.deltaTime*Time.timeScale)/m_TimeToDeathByThirst;
+        m_CurrentReproductionUrge += (Time.deltaTime*Time.timeScale)/m_TotalReproductionUrge;
 
         m_CurrentThirst = Mathf.Clamp01(m_CurrentThirst);
         m_CurrentHunger = Mathf.Clamp01(m_CurrentHunger);
         m_CurrentReproductionUrge = Mathf.Clamp01(m_CurrentReproductionUrge);
         m_CurrentEnergy = Mathf.Clamp(m_CurrentEnergy, 0.0f, m_CurrentThirst);
         if(curTimeToAdulthood < 1.0f)
-            curTimeToAdulthood += Time.deltaTime/timeToAdulthood;
+            curTimeToAdulthood += (Time.deltaTime*Time.timeScale)/timeToAdulthood;
 
         gameObject.transform.localScale = Vector3.Lerp(pointsix, Vector3.one, curTimeToAdulthood);
         // gameObject.transform.localScale = Vector3.ClampMagnitude(gameObject.transform.localScale, 1.0f);

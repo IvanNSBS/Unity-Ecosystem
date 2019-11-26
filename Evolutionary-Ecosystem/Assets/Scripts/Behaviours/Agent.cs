@@ -28,6 +28,8 @@ public class Agent : MonoBehaviour {
     private float m_reproducing = 0.0f, m_gestating;
     [SerializeField] private GameObject m_OffspringPrefab;
 
+
+    public bool IsWanderNull() { return wander_point == null; }
     void Awake()
     {
         m_AgentGenes.RandomizeGenes(genes_ranges);     
@@ -326,7 +328,7 @@ public class Agent : MonoBehaviour {
 
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
-        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude);
+        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude*Time.timeScale);
         ConsumeFood();
         ConsumeWater();
         ScanForPartner();
