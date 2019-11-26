@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 41995069}
   - component: {fileID: 41995071}
   - component: {fileID: 41995070}
-  - component: {fileID: 41995072}
   m_Layer: 0
   m_Name: North
   m_TagString: North
@@ -228,18 +227,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &41995072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41995068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05ee569583ad4fc498beff255d9189a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &88608007
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +279,8 @@ MonoBehaviour:
   m_SpawnPct: 0.025
   m_FoodPrefab: {fileID: 7706643614276787505, guid: c1541cbbc41c3d44d82033e84ea9b9c5,
     type: 3}
+  actualFoodAmount: 0
+  maximumFoodAmount: 1000
   initialRabbitAmount: 180
   rabbitPrefab: {fileID: 7443354811830918411, guid: f3758b7c9b1a6eb41b72799f58add5f1,
     type: 3}

@@ -54,6 +54,7 @@ public class Agent : MonoBehaviour {
 
         //add back to pool;
         // gameObject.SetActive(false);
+        Debug.Log("Rabbit died of: " + cause);
         ObjectPooler.Instance.AddToPool(tag, gameObject);
     }
 
