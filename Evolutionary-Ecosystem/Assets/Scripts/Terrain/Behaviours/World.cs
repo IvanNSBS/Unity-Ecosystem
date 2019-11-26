@@ -173,7 +173,7 @@ public class World : MonoBehaviour
     {
         if(x < 0 || x >= width || y < 0 || y >= height)
         {
-            return null;
+            return new WorldTile(WorldTile.Type.Water);
         }
         return tiles[x, y];
     }
