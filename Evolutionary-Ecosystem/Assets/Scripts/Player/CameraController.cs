@@ -88,6 +88,26 @@ public class CameraController : MonoBehaviour {
         ui_canvas.SetActive(false);
     }
 
+    public void Scale1x()
+    {
+        Time.timeScale = 1.0f;
+    }
+    public void Scale2x()
+    {
+        Time.timeScale = 2.0f;
+    }
+    public void Scale3x()
+    {
+        Time.timeScale = 3.0f;
+    }
+    public void ScaleHalf()
+    {
+        Time.timeScale = 0.5f;
+    }
+    public void ScaleQuarter()
+    {
+        Time.timeScale = 0.25f;
+    }
     private void LateUpdate() 
     {
         if(Input.GetKeyDown(KeyCode.F) && selectedAnimal){
