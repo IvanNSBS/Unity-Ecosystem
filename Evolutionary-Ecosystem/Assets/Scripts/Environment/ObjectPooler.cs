@@ -63,6 +63,7 @@ public class ObjectPooler : MonoBehaviour {
         obj_life.ResetLifeStatus();
         obj_vision.ResetVision();
         obj.transform.position = pos;
+
         return obj;
     }
 }

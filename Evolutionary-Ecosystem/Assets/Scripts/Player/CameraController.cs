@@ -11,6 +11,12 @@ public class CameraController : MonoBehaviour {
     [HideInInspector] public GameObject selectedAnimal;
     private bool following = false;
 
+
+    [Header("Data UI")]
+    [SerializeField] TextMeshProUGUI text_wolf_pop;
+    [SerializeField] TextMeshProUGUI text_rabbit_pop;
+    [SerializeField] TextMeshProUGUI text_veg_pop;
+    [Header("Animal UI")]
     [SerializeField] GameObject ui_canvas;
     [SerializeField] Image animalSprite;
     [SerializeField] Image slider_hunger;
@@ -82,6 +88,13 @@ public class CameraController : MonoBehaviour {
         text_thirst.text = "Thirst: " + (int)(life.m_CurrentThirst*100)+"%";
         text_urge.text = "Repr. Urge: " + (int)(life.m_CurrentReproductionUrge*100)+"%";
         text_state.text = "Current State: " + selectedAnimal.GetComponent<Agent>().m_FSM.state.ToString();
+    }
+
+    public void UpdateDataUI(int wolfpop, int rabbitpop, int foodpop)
+    {
+        text_wolf_pop.text = "Current Wolf Population: " + wolfpop.ToString();
+        text_rabbit_pop.text = "Current Rabbit Population: " + rabbitpop.ToString();
+        text_veg_pop.text = "Current Vegetal Population: " + foodpop.ToString();
     }
 
     private void Awake() {
