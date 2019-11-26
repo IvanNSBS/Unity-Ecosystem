@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WolfParameters
   m_EditorClassIdentifier: 
   m_LifeTime: 500
-  m_TimeToDeathByHunger: 600
-  m_TimeToDeathByThirst: 500
+  m_TimeToDeathByHunger: 300
+  m_TimeToDeathByThirst: 250
   m_TotalEnergy: 100
   m_TotalReproductionUrge: 50
   timeToAdulthood: 50

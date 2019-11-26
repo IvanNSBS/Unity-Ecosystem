@@ -45,7 +45,7 @@ public class AgentStateMachine
         // Priority = Flee --> DrinkWater -->  Eat --> Reproduce --> Rest
         if(m_Owner.visible_predators.Count > 0)
             state = AgentState.Fleeing;
-        else if(m_Owner.m_MateTarget != null){
+        else if(m_Owner.m_MateTarget != null && m_Owner.m_MateTarget.activeSelf){
             if(m_Owner.m_AgentGenes.m_IsMale)
                 state = AgentState.GoingToPartner;
             else{

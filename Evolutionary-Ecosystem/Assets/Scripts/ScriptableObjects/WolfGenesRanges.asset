@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bbc91e33223fdf419b44abe1412aa76, type: 3}
   m_Name: WolfGenesRanges
   m_EditorClassIdentifier: 
-  max_offsprings: 3
-  min_gestation_duration: 20
-  max_gestation_duration: 50
+  max_offsprings: 6
+  min_gestation_duration: 15
+  max_gestation_duration: 30
   min_sight_range: 2
   max_sight_range: 6
   min_forget_range: 5
   max_forget_range: 6
-  min_speed: 1.5
-  max_speed: 3
-  min_force: 1.5
-  max_force: 3
+  min_speed: 1
+  max_speed: 2.3
+  min_force: 1
+  max_force: 1.8

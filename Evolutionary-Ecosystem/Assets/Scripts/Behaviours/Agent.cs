@@ -104,7 +104,7 @@ public class Agent : MonoBehaviour {
                 food_data.Consume(gameObject, Time.deltaTime);
             else{
                 // Debug.Log("eating prey!!");
-                m_LifeComponent.m_CurrentHunger -= 0.25f;
+                m_LifeComponent.m_CurrentHunger -= 0.08f;
                 m_EatingFood.GetComponent<Agent>().Die(CauseOfDeath.Eaten);
                 m_EatingFood = null;
             }
@@ -144,8 +144,9 @@ public class Agent : MonoBehaviour {
             m_FSM.state = AgentState.Exploring;
             var father_genes = m_MateTarget.GetComponent<Agent>().m_AgentGenes;
             m_MateTarget = null;
-            m_LifeComponent.m_CurrentReproductionUrge = Mathf.Clamp(m_LifeComponent.m_CurrentReproductionUrge-0.35f, 0.0f, 1.0f);
-            if(!m_AgentGenes.m_IsMale)
+            m_LifeComponent.m_CurrentReproductionUrge -= 0.35f;
+            m_LifeComponent.m_CurrentReproductionUrge = Mathf.Clamp(m_LifeComponent.m_CurrentReproductionUrge, 0.0f, 1.0f);
+            if (!m_AgentGenes.m_IsMale)
                 StartCoroutine(Gestate(father_genes));
         }
     }
@@ -223,7 +224,7 @@ public class Agent : MonoBehaviour {
 
         arrived = false;
         GameObject found = null;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 0.35f, m_AgentGenes, ref arrived, ref found);
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_food, m_AgentGenes.m_SightRadius, 1f, m_AgentGenes, ref arrived, ref found);
         if(arrived && m_FSM.state == AgentState.GoingToFood){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_EatingFood = found;
@@ -235,10 +236,10 @@ public class Agent : MonoBehaviour {
         if(waiting){
             return;
         }
-
+        bool debug = tag == "wolf" && AgentState.GoingToWater == m_FSM.state;
         arrived = false;
         GameObject found = null;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 1f, m_AgentGenes, ref arrived, ref found, remove:false);
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 2f, m_AgentGenes, ref arrived, ref found, remove:false, debug);
         if(arrived && m_FSM.state == AgentState.GoingToWater){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_WaterDrinking = found;
@@ -305,6 +306,13 @@ public class Agent : MonoBehaviour {
 
     public bool RequestMate(GameObject male)
     {
+        if (!visible_animals.Contains(m_MateTarget))
+        {
+            m_FSM.state = AgentState.Exploring;
+            m_MateTarget = null;
+            return false;
+        }
+
         if(m_LifeComponent.m_CurrentReproductionUrge < m_AgentGenes.m_CriticalUrge)
             return false;
         

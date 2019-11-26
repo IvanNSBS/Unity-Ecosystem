@@ -282,11 +282,11 @@ MonoBehaviour:
     type: 3}
   actualFoodAmount: 0
   maximumFoodAmount: 250
-  initialRabbitAmount: 0
+  initialRabbitAmount: 50
   rabbitPrefab: {fileID: 7443354811830918411, guid: f3758b7c9b1a6eb41b72799f58add5f1,
     type: 3}
   actualRabbitAmount: 0
-  initialWolfAmount: 10
+  initialWolfAmount: 25
   wolfPrefab: {fileID: 7443354811830918411, guid: aa01b2b5abe669142b2945efa69952d5,
     type: 3}
   actualWolfAmount: 0
