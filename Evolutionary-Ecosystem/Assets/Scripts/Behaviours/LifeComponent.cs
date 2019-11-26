@@ -4,6 +4,8 @@ public class LifeComponent : MonoBehaviour {
 
     private float m_EnergyUsage = 0.1f;
     [HideInInspector] public Rigidbody2D m_RigidBody;
+    [Header("Race Parameters")]
+    public RaceLifeParameters parameters;
     [Header("Life Parameters")]
     public float m_LifeTime = 500.0f;
     public float m_TimeToDeathByHunger = 250.0f;
@@ -31,6 +33,13 @@ public class LifeComponent : MonoBehaviour {
 
     public void ResetLifeStatus()
     {
+        m_LifeTime = parameters.m_LifeTime;
+        m_TimeToDeathByHunger = parameters.m_TimeToDeathByHunger;
+        m_TimeToDeathByThirst = parameters.m_TimeToDeathByThirst;
+        m_TotalEnergy = parameters.m_TotalEnergy;
+        m_TotalReproductionUrge = parameters.m_TotalReproductionUrge;
+        timeToAdulthood = parameters.timeToAdulthood;
+
         m_RemainingLifetime = m_LifeTime;
         m_CurrentHunger = 0;
         m_CurrentThirst = 0;
