@@ -256,11 +256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68375169a2377e45b6c237c2a841a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 100
-  height: 100
+  width: 110
+  height: 110
   material: {fileID: 2100000, guid: c1bb1c6585a68454fb86d65272d2c8a6, type: 2}
   WaterPrefab: {fileID: 123850663358759146, guid: eee7c034a393d3147a1085dec366d3b8,
     type: 3}
+  waterBoundSize: 10
   seed: 
   randomSeed: 1
   frequency: 12
@@ -281,8 +282,11 @@ MonoBehaviour:
     type: 3}
   actualFoodAmount: 0
   maximumFoodAmount: 1000
-  initialRabbitAmount: 180
+  initialRabbitAmount: 170
   rabbitPrefab: {fileID: 7443354811830918411, guid: f3758b7c9b1a6eb41b72799f58add5f1,
+    type: 3}
+  initialWolfAmount: 100
+  wolfPrefab: {fileID: 7443354811830918411, guid: aa01b2b5abe669142b2945efa69952d5,
     type: 3}
 --- !u!4 &88608009
 Transform:
@@ -400,6 +404,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 369776257001041420, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.31764707
+      objectReference: {fileID: 0}
+    - target: {fileID: 369776257001041420, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.7294118
+      objectReference: {fileID: 0}
+    - target: {fileID: 369776257001041420, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.5686275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6740621eedcfb194fbcf2cbba4d36e93, type: 3}

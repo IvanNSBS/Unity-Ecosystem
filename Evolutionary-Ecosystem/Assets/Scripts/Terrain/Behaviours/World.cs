@@ -13,6 +13,7 @@ public class World : MonoBehaviour
     public WorldTile[,] tiles;
     public Material material;
     public GameObject WaterPrefab;
+    public int waterBoundSize;
 
     [Header("Noise Settings")]
     public string seed;
@@ -43,6 +44,10 @@ public class World : MonoBehaviour
     public int initialRabbitAmount;
     public GameObject rabbitPrefab;
 
+    [Header("Wolf Population Settings")]
+    public int initialWolfAmount;
+    public GameObject wolfPrefab;
+
     void Awake()
     {
         instance = this;
@@ -63,6 +68,7 @@ public class World : MonoBehaviour
         SubdivideTilesArray();
         SpawnInitialFood();
         SpawnInitialRabbitPopulation();
+        SpawnInitialWolfPopulation();
     }
 
     // Update is called once per frame
@@ -75,8 +81,8 @@ public class World : MonoBehaviour
                 int foodX, foodY;
                 do
                 {
-                    foodX = Random.Range(0, width);
-                    foodY = Random.Range(0, height);
+                    foodX = Random.Range(waterBoundSize + 1, width - waterBoundSize);
+                    foodY = Random.Range(waterBoundSize + 1, height - waterBoundSize);
 
                 } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
                 var obj = Instantiate(m_FoodPrefab);
@@ -96,7 +102,13 @@ public class World : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                tiles[i, j] = MakeTileAtHeight(noiseValues[i, j]);
+                if ((i <= waterBoundSize || i >= width - waterBoundSize) || (j <= waterBoundSize || j >= height - waterBoundSize))
+                {
+                    tiles[i, j] = new WorldTile(WorldTile.Type.Water);
+                }else
+                {
+                    tiles[i, j] = MakeTileAtHeight(noiseValues[i, j]);
+                }
             }
         }
 
@@ -201,8 +213,8 @@ public class World : MonoBehaviour
             int foodX, foodY;
             do
             {
-                foodX = Random.Range(0, width);
-                foodY = Random.Range(0, height);
+                foodX = Random.Range(waterBoundSize + 1, width - waterBoundSize);
+                foodY = Random.Range(waterBoundSize + 1, height - waterBoundSize);
 
             } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
             var obj = Instantiate(m_FoodPrefab);
@@ -218,12 +230,29 @@ public class World : MonoBehaviour
             int rabbitX, rabbitY;
             do
             {
-                rabbitX = Random.Range(3, width - 3);
-                rabbitY = Random.Range(3, height - 3);
+                rabbitX = Random.Range(waterBoundSize + 1, width - waterBoundSize);
+                rabbitY = Random.Range(waterBoundSize + 1, height - waterBoundSize);
 
             } while (GetTileAt(rabbitX, rabbitY).type == WorldTile.Type.Water || GetTileAt(rabbitX, rabbitY).type == WorldTile.Type.Void);
             var obj = Instantiate(rabbitPrefab);
             obj.gameObject.transform.position = new Vector2(rabbitX + 0.5f, rabbitY + 0.5f);
+            obj.GetComponent<LifeComponent>().curTimeToAdulthood = 1.0f;
+        }
+    }
+
+    void SpawnInitialWolfPopulation()
+    {
+        for (int i = 0; i < initialWolfAmount; i++)
+        {
+            int wolfX, wolfY;
+            do
+            {
+                wolfX = Random.Range(waterBoundSize + 1, width - waterBoundSize);
+                wolfY = Random.Range(waterBoundSize + 1, height - waterBoundSize);
+
+            } while (GetTileAt(wolfX, wolfY).type == WorldTile.Type.Water || GetTileAt(wolfX, wolfY).type == WorldTile.Type.Void);
+            var obj = Instantiate(wolfPrefab);
+            obj.gameObject.transform.position = new Vector2(wolfX + 0.5f, wolfY + 0.5f);
             obj.GetComponent<LifeComponent>().curTimeToAdulthood = 1.0f;
         }
     }
