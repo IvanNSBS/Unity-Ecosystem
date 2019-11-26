@@ -43,10 +43,12 @@ public class World : MonoBehaviour
     [Header("Rabbit Population Settings")]
     public int initialRabbitAmount;
     public GameObject rabbitPrefab;
+    public int actualRabbitAmount;
 
     [Header("Wolf Population Settings")]
     public int initialWolfAmount;
     public GameObject wolfPrefab;
+    public int actualWolfAmount;
 
     void Awake()
     {
@@ -69,6 +71,7 @@ public class World : MonoBehaviour
         SpawnInitialFood();
         SpawnInitialRabbitPopulation();
         SpawnInitialWolfPopulation();
+        UpdateUI();
     }
 
     // Update is called once per frame
@@ -88,6 +91,7 @@ public class World : MonoBehaviour
                 var obj = Instantiate(m_FoodPrefab);
                 obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
                 actualFoodAmount++;
+                UpdateUI();
             }
         }
         
@@ -237,6 +241,7 @@ public class World : MonoBehaviour
             var obj = Instantiate(rabbitPrefab);
             obj.gameObject.transform.position = new Vector2(rabbitX + 0.5f, rabbitY + 0.5f);
             obj.GetComponent<LifeComponent>().curTimeToAdulthood = 1.0f;
+            actualRabbitAmount++;
         }
     }
 
@@ -254,6 +259,12 @@ public class World : MonoBehaviour
             var obj = Instantiate(wolfPrefab);
             obj.gameObject.transform.position = new Vector2(wolfX + 0.5f, wolfY + 0.5f);
             obj.GetComponent<LifeComponent>().curTimeToAdulthood = 1.0f;
+            actualWolfAmount++;
         }
+    }
+
+    public void UpdateUI()
+    {
+        CameraController.instance.UpdateDataUI(actualWolfAmount, actualRabbitAmount, actualFoodAmount);
     }
 }

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 
 public class CameraController : MonoBehaviour {
+
+    public static CameraController instance;
+
     [SerializeField] private Camera m_Camera;
     [SerializeField] private float m_CameraSpeed = 2.0f;
     [SerializeField] private float m_ZoomSpeed = 0.5f;
@@ -99,6 +102,7 @@ public class CameraController : MonoBehaviour {
 
     private void Awake() {
         ui_canvas.SetActive(false);
+        instance = this;
     }
 
     public void Scale1x()

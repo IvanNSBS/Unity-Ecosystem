@@ -58,6 +58,11 @@ public class Agent : MonoBehaviour {
         // gameObject.SetActive(false);
         Debug.Log("Rabbit died of: " + cause);
         ObjectPooler.Instance.AddToPool(tag, gameObject);
+        if (tag == "rabbit")
+            World.instance.actualRabbitAmount--;
+        if (tag == "wolf")
+            World.instance.actualWolfAmount--;
+        World.instance.UpdateUI();
     }
 
     public void ResetAgent(bool cross_over = false, Genes father = null, Genes mother = null)

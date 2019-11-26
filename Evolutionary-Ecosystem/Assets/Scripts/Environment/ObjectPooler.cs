@@ -64,6 +64,12 @@ public class ObjectPooler : MonoBehaviour {
         obj_vision.ResetVision();
         obj.transform.position = pos;
 
+        if (tag == "rabbit")
+            World.instance.actualRabbitAmount++;
+        if (tag == "wolf")
+            World.instance.actualWolfAmount++;
+
+        World.instance.UpdateUI();
         return obj;
     }
 }

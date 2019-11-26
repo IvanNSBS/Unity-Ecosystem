@@ -256,8 +256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68375169a2377e45b6c237c2a841a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 110
-  height: 110
+  width: 60
+  height: 60
   material: {fileID: 2100000, guid: c1bb1c6585a68454fb86d65272d2c8a6, type: 2}
   WaterPrefab: {fileID: 123850663358759146, guid: eee7c034a393d3147a1085dec366d3b8,
     type: 3}
@@ -269,25 +269,27 @@ MonoBehaviour:
   lacunarity: 0.12
   persistance: 0.69
   octaves: 8
-  seaLevel: 0.35
-  dirtStartHeight: 0.35
-  dirtEndHeight: 0.41
-  grassStartHeight: 0.41
-  grassEndHeight: 0.75
-  highGrassStartHeight: 0.75
+  seaLevel: 0.175
+  dirtStartHeight: 0.175
+  dirtEndHeight: 0.21
+  grassStartHeight: 0.21
+  grassEndHeight: 0.65
+  highGrassStartHeight: 0.65
   highGrassEndHeight: 1
-  m_InitialFoodAmount: 500
-  m_SpawnPct: 0.025
+  m_InitialFoodAmount: 100
+  m_SpawnPct: 0.01
   m_FoodPrefab: {fileID: 7706643614276787505, guid: c1541cbbc41c3d44d82033e84ea9b9c5,
     type: 3}
   actualFoodAmount: 0
-  maximumFoodAmount: 1000
-  initialRabbitAmount: 150
+  maximumFoodAmount: 250
+  initialRabbitAmount: 0
   rabbitPrefab: {fileID: 7443354811830918411, guid: f3758b7c9b1a6eb41b72799f58add5f1,
     type: 3}
-  initialWolfAmount: 150
+  actualRabbitAmount: 0
+  initialWolfAmount: 10
   wolfPrefab: {fileID: 7443354811830918411, guid: aa01b2b5abe669142b2945efa69952d5,
     type: 3}
+  actualWolfAmount: 0
 --- !u!4 &88608009
 Transform:
   m_ObjectHideFlags: 0
@@ -419,6 +421,81 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BackGroundColor.b
       value: 0.5686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771880280719510817, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771880280719510817, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771880280719510817, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771880280719510817, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771880280719510817, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307055150492162519, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307055150492162519, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307055150492162519, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307055150492162519, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307055150492162519, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043375864089388529, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043375864089388529, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043375864089388529, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043375864089388529, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043375864089388529, guid: 6740621eedcfb194fbcf2cbba4d36e93,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6740621eedcfb194fbcf2cbba4d36e93, type: 3}
