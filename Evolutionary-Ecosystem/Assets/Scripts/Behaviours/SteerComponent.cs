@@ -8,7 +8,7 @@ public class SteerComponent : MonoBehaviour
     public Vector2 GetVelocity() { return m_RigidBody.velocity; }
     public void ApplyForce(Vector2 force, float max_force) { 
         m_RigidBody.velocity += force;
-        m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity, max_force);
+        m_RigidBody.velocity = Vector2.ClampMagnitude(m_RigidBody.velocity*Time.timeScale, max_force);
     }
 
     private Vector2 SetMagnitude(Vector2 vector, float magnitude){

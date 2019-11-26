@@ -326,7 +326,7 @@ public class Agent : MonoBehaviour {
 
         m_FSM.DecideNextState();
         var steer = m_FSM.GetStateSteer();
-        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude);
+        m_SteerBehavior.ApplyForce(steer, m_AgentGenes.m_MaxSpeed * gameObject.transform.localScale.magnitude*Time.timeScale);
         ConsumeFood();
         ConsumeWater();
         ScanForPartner();
