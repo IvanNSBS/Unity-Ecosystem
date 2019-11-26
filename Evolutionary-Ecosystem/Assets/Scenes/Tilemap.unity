@@ -131,9 +131,10 @@ GameObject:
   - component: {fileID: 41995069}
   - component: {fileID: 41995071}
   - component: {fileID: 41995070}
+  - component: {fileID: 41995072}
   m_Layer: 0
   m_Name: North
-  m_TagString: Untagged
+  m_TagString: North
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -227,6 +228,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &41995072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41995068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ee569583ad4fc498beff255d9189a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &88608007
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +470,7 @@ GameObject:
   - component: {fileID: 920961172}
   m_Layer: 0
   m_Name: East
-  m_TagString: Untagged
+  m_TagString: East
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -633,7 +646,7 @@ GameObject:
   - component: {fileID: 1357725119}
   m_Layer: 0
   m_Name: West
-  m_TagString: Untagged
+  m_TagString: West
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -740,7 +753,7 @@ GameObject:
   - component: {fileID: 1948316168}
   m_Layer: 0
   m_Name: South
-  m_TagString: Untagged
+  m_TagString: South
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -849,7 +862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2029977372
 Transform:
   m_ObjectHideFlags: 0
