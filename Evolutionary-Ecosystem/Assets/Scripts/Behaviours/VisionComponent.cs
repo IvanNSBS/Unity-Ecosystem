@@ -40,8 +40,11 @@ public class VisionComponent : MonoBehaviour
                 else if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_predators.Contains(other.gameObject))
                     obj_agent.visible_predators.Add(other.gameObject);
             } 
-            else if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_food.Contains(other.gameObject)){
-                obj_agent.visible_food.Add(other.gameObject);
+            else {
+                if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_food.Contains(other.gameObject))
+                    obj_agent.visible_food.Add(other.gameObject);
+                if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_animals.Contains(other.gameObject))
+                    obj_agent.visible_animals.Add(other.gameObject);
             }
         }    
     }
