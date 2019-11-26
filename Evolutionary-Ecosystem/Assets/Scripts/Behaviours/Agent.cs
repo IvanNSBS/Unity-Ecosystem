@@ -56,6 +56,7 @@ public class Agent : MonoBehaviour {
 
         //add back to pool;
         // gameObject.SetActive(false);
+        Debug.Log("Rabbit died of: " + cause);
         ObjectPooler.Instance.AddToPool(tag, gameObject);
     }
 
@@ -189,20 +190,19 @@ public class Agent : MonoBehaviour {
                 Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 3.0f);
                 tryWanderPoint = this.transform.position + r_point;
                 var output = Physics2D.OverlapCircleAll(tryWanderPoint, 0.5f);
+                /*
                 foreach (Collider2D collider in output)
                 {
                     if (collider.gameObject.CompareTag("North") || collider.gameObject.CompareTag("South")) { }
                         r_point.y *= -1;
+
                     if (collider.gameObject.CompareTag("East") || collider.gameObject.CompareTag("West"))
                         r_point.x *= -1;
+
                     tryWanderPoint = this.transform.position + r_point;
                 }
-            } while (World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Water);
-            if ((tryWanderPoint.x <= 0.5f || tryWanderPoint.x >= World.instance.width + 0.5f) && (tryWanderPoint.y <= 0.5f || tryWanderPoint.y >= World.instance.height + 0.5f))
-            {
-                Debug.Log("Algum coelho filha da puta tentou sair do mapa");
-                return;
-            }
+                */
+            } while (tryWanderPoint.x <= 0.5f || tryWanderPoint.x >= World.instance.width || tryWanderPoint.y <= 0.5f || tryWanderPoint.y >= World.instance.height || World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Water);
             wander_point = tryWanderPoint;
         }
         

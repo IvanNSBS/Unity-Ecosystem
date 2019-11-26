@@ -36,6 +36,8 @@ public class World : MonoBehaviour
     public int m_InitialFoodAmount = 20;
     public float m_SpawnPct = 0.05f;
     public GameObject m_FoodPrefab;
+    public int actualFoodAmount = 0;
+    [SerializeField]private int maximumFoodAmount;
 
     [Header("Rabbit Population Settings")]
     public int initialRabbitAmount;
@@ -66,18 +68,23 @@ public class World : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Random.Range(0.0f, 1.0f) < m_SpawnPct)
+        if(actualFoodAmount <= maximumFoodAmount)
         {
-            int foodX, foodY;
-            do
+            if (Random.Range(0.0f, 1.0f) < m_SpawnPct)
             {
-                foodX = Random.Range(0, width);
-                foodY = Random.Range(0, height);
+                int foodX, foodY;
+                do
+                {
+                    foodX = Random.Range(0, width);
+                    foodY = Random.Range(0, height);
 
-            } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
-            var obj = Instantiate(m_FoodPrefab);
-            obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+                } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
+                var obj = Instantiate(m_FoodPrefab);
+                obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+                actualFoodAmount++;
+            }
         }
+        
     }
 
     void CreateTiles()
@@ -166,7 +173,7 @@ public class World : MonoBehaviour
     {
         if(x < 0 || x >= width || y < 0 || y >= height)
         {
-            return null;
+            return new WorldTile(WorldTile.Type.Water);
         }
         return tiles[x, y];
     }
@@ -200,6 +207,7 @@ public class World : MonoBehaviour
             } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
             var obj = Instantiate(m_FoodPrefab);
             obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+            actualFoodAmount++;
         }
     }
 

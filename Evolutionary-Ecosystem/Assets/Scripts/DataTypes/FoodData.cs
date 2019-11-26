@@ -23,7 +23,10 @@ public class FoodData : MonoBehaviour {
         agent.m_LifeComponent.m_CurrentHunger = Mathf.Clamp(agent.m_LifeComponent.m_CurrentHunger, 0.0f, Mathf.Infinity);
         usages -= amount;
         if(usages <= 0)
+        {
+            World.instance.actualFoodAmount--;
             Destroy(gameObject);
+        }
         else    
             gameObject.transform.localScale = start_scale * (usages/max_usages);
     }
