@@ -184,7 +184,7 @@ public class Agent : MonoBehaviour {
             Vector3 tryWanderPoint;
             do
             {
-                Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.25f, 1.0f);
+                Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 3.0f);
                 tryWanderPoint = this.transform.position + r_point;
 
             } while (World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Water || World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Void);

@@ -20,6 +20,8 @@ public class VisionComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (!obj_agent)
+            return;
         var agent = other.gameObject.GetComponent<Agent>();
         if(!agent){
             var food = other.gameObject.GetComponent<FoodData>();
