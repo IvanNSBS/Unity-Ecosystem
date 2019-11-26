@@ -28,6 +28,8 @@ public class Agent : MonoBehaviour {
     private float m_reproducing = 0.0f, m_gestating;
     [SerializeField] private GameObject m_OffspringPrefab;
 
+
+    public bool IsWanderNull() { return wander_point == null; }
     void Awake()
     {
         m_AgentGenes.RandomizeGenes(genes_ranges);     

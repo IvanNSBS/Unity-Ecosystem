@@ -77,7 +77,8 @@ public class AgentStateMachine
 
         m_Owner.EvadeAgents(ref steer_avoid);
         m_Owner.SeekFood(ref steer_seek, ref seek_arrive);
-        m_Owner.Explore(ref steer_explore, ref explore_arrive);
+        if(!m_Owner.IsWanderNull())
+            m_Owner.Explore(ref steer_explore, ref explore_arrive);
         m_Owner.SeekWater(ref steer_water, ref water_arrive);
         if(m_Owner.m_AgentGenes.m_IsMale)
             m_Owner.GoToMate(ref steer_reproduction, ref reproduction_arrive);
