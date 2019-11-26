@@ -223,7 +223,7 @@ public class Agent : MonoBehaviour {
 
         arrived = false;
         GameObject found = null;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 1f, m_AgentGenes, ref arrived, ref found);
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 1f, m_AgentGenes, ref arrived, ref found, remove:false);
         if(arrived && m_FSM.state == AgentState.GoingToWater){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_WaterDrinking = found;

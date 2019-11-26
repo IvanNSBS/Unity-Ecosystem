@@ -61,6 +61,7 @@ public class ObjectPooler : MonoBehaviour {
         var obj_vision = obj.GetComponent<VisionComponent>();
         obj_agent.ResetAgent(true, father, mother);
         obj_life.ResetLifeStatus();
+        Debug.Log("Coelhos reproduziram");
         obj_vision.ResetVision();
         obj.transform.position = pos;
         return obj;

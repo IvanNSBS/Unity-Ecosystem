@@ -85,7 +85,7 @@ public class SteerComponent : MonoBehaviour
         return Vector2.zero;
     }
 
-    public Vector2 SeekAndArrive(ref List<GameObject> targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived, ref GameObject seeked)
+    public Vector2 SeekAndArrive(ref List<GameObject> targets, float seek_tol, float arrive_tol, Genes genes, ref bool arrived, ref GameObject seeked, bool remove = true)
     {
         GameObject target_pos;
         float min_dist;
@@ -98,7 +98,8 @@ public class SteerComponent : MonoBehaviour
             if(min_dist < arrive_tol){
                 var steer =  GetSteer(pos, seek_tol, genes, lerp: true);
                 arrived = true;
-                targets.Remove(target_pos);
+                if(remove)
+                    targets.Remove(target_pos);
                 return steer;
             }
 
