@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde018407d033514780e727b381e892a, type: 3}
+  m_Name: WolfParameters
+  m_EditorClassIdentifier: 
+  m_LifeTime: 500
+  m_TimeToDeathByHunger: 250
+  m_TimeToDeathByThirst: 180
+  m_TotalEnergy: 100
+  m_TotalReproductionUrge: 100
+  timeToAdulthood: 50

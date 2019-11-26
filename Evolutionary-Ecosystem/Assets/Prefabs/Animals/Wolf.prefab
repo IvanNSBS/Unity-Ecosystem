@@ -206,6 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RigidBody: {fileID: 0}
+  parameters: {fileID: 11400000, guid: 91d423d4ad07b1e4a86fcc3b0f61c895, type: 2}
   m_LifeTime: 500
   m_TimeToDeathByHunger: 150
   m_TimeToDeathByThirst: 80
