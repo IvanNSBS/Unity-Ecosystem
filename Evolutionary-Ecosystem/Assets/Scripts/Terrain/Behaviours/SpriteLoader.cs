@@ -49,7 +49,6 @@ public class SpriteLoader : MonoBehaviour
                 int random = Random.Range(0, 2);
                 if (random != 0)
                     key = key + random.ToString();
-                Debug.Log(key);
             }
             return tileUVMap[key];
         }

@@ -33,9 +33,13 @@ public class World : MonoBehaviour
     public float highGrassEndHeight;
 
     [Header("Food Settings")]
-    public int m_InitialAmount = 20;
+    public int m_InitialFoodAmount = 20;
     public float m_SpawnPct = 0.05f;
     public GameObject m_FoodPrefab;
+
+    [Header("Rabbit Population Settings")]
+    public int initialRabbitAmount;
+    public GameObject rabbitPrefab;
 
     void Awake()
     {
@@ -55,18 +59,8 @@ public class World : MonoBehaviour
     {
         CreateTiles();
         SubdivideTilesArray();
-        for (int i = 0; i < m_InitialAmount; i++)
-        {
-            int foodX, foodY;
-            do
-            {
-                foodX = Random.Range(0, width + 1);
-                foodY = Random.Range(0, height + 1);
-
-            } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
-            var obj = Instantiate(m_FoodPrefab);
-            obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
-        }
+        SpawnInitialFood();
+        SpawnInitialRabbitPopulation();
     }
 
     // Update is called once per frame
@@ -77,8 +71,8 @@ public class World : MonoBehaviour
             int foodX, foodY;
             do
             {
-                foodX = Random.Range(0, width + 1);
-                foodY = Random.Range(0, height + 1);
+                foodX = Random.Range(0, width);
+                foodY = Random.Range(0, height);
 
             } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
             var obj = Instantiate(m_FoodPrefab);
@@ -190,6 +184,39 @@ public class World : MonoBehaviour
                     go.transform.SetParent(this.gameObject.transform);
                 }
             }
+        }
+    }
+
+    void SpawnInitialFood()
+    {
+        for (int i = 0; i < m_InitialFoodAmount; i++)
+        {
+            int foodX, foodY;
+            do
+            {
+                foodX = Random.Range(0, width);
+                foodY = Random.Range(0, height);
+
+            } while (GetTileAt(foodX, foodY).type == WorldTile.Type.Water || GetTileAt(foodX, foodY).type == WorldTile.Type.Void);
+            var obj = Instantiate(m_FoodPrefab);
+            obj.gameObject.transform.position = new Vector2(foodX + 0.5f, foodY + 0.5f);
+        }
+    }
+
+    void SpawnInitialRabbitPopulation()
+    {
+        for (int i = 0; i < initialRabbitAmount; i++)
+        {
+            int rabbitX, rabbitY;
+            do
+            {
+                rabbitX = Random.Range(3, width - 3);
+                rabbitY = Random.Range(3, height - 3);
+
+            } while (GetTileAt(rabbitX, rabbitY).type == WorldTile.Type.Water || GetTileAt(rabbitX, rabbitY).type == WorldTile.Type.Void);
+            var obj = Instantiate(rabbitPrefab);
+            obj.gameObject.transform.position = new Vector2(rabbitX + 0.5f, rabbitY + 0.5f);
+            obj.GetComponent<LifeComponent>().curTimeToAdulthood = 1.0f;
         }
     }
 }

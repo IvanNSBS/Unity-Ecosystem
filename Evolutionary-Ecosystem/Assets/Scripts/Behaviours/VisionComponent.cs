@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class VisionComponent : MonoBehaviour 
@@ -15,7 +14,6 @@ public class VisionComponent : MonoBehaviour
 
     public void ResetVision()
     {
-        var radius = 
         vision.radius = !m_IsForget ? obj_agent.m_AgentGenes.m_SightRadius : obj_agent.m_AgentGenes.m_ForgetRadius;
         vision.isTrigger = true;
     }
@@ -26,7 +24,7 @@ public class VisionComponent : MonoBehaviour
         if(!agent){
             var food = other.gameObject.GetComponent<FoodData>();
             if(food){
-                if(!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject) && obj_agent.m_Diet == AgentDiet.Vegetal)
+                if (!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject) && obj_agent.m_Diet == AgentDiet.Vegetal)
                     obj_agent.visible_food.Add(other.gameObject);
             }
             else if(!m_IsForget && !obj_agent.visible_water.Contains(other.gameObject))

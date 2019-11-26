@@ -181,9 +181,14 @@ public class Agent : MonoBehaviour {
             return;
 
         if(wander_point == null){
+            Vector3 tryWanderPoint;
+            do
+            {
+                Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.25f, 1.0f);
+                tryWanderPoint = this.transform.position + r_point;
 
-            Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 2.0f);
-            wander_point = this.transform.position + r_point;
+            } while (World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Water || World.instance.GetTileAt((int)tryWanderPoint.x, (int)tryWanderPoint.y).type == WorldTile.Type.Void);
+            wander_point = tryWanderPoint;
         }
         
         Vector2[] pts = { (Vector2)wander_point };
@@ -218,7 +223,7 @@ public class Agent : MonoBehaviour {
 
         arrived = false;
         GameObject found = null;
-        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 0.15f, m_AgentGenes, ref arrived, ref found);
+        steer = m_SteerBehavior.SeekAndArrive(ref visible_water, m_AgentGenes.m_SightRadius, 1f, m_AgentGenes, ref arrived, ref found);
         if(arrived && m_FSM.state == AgentState.GoingToWater){
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             m_WaterDrinking = found;
