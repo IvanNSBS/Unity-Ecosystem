@@ -15,8 +15,8 @@ MonoBehaviour:
   max_offsprings: 11
   min_gestation_duration: 5
   max_gestation_duration: 20
-  min_sight_range: 0.3
-  max_sight_range: 3
+  min_sight_range: 1
+  max_sight_range: 5.5
   min_forget_range: 2
   max_forget_range: 5
   min_speed: 0.5

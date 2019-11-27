@@ -97,14 +97,14 @@ public class Agent : MonoBehaviour {
     {
         if(m_FSM.state != AgentState.Eating)
             return;
-        if(m_LifeComponent.m_CurrentHunger > m_AgentGenes.m_NotHungry && m_EatingFood != null){
+        if(m_LifeComponent.m_CurrentHunger > m_AgentGenes.m_CriticalHunger && m_EatingFood != null){
             waiting = true;
             var food_data = m_EatingFood.GetComponent<FoodData>();
             if(food_data)
                 food_data.Consume(gameObject, Time.deltaTime);
             else{
                 // Debug.Log("eating prey!!");
-                m_LifeComponent.m_CurrentHunger -= 0.08f;
+                m_LifeComponent.m_CurrentHunger -= 0.15f;
                 m_EatingFood.GetComponent<Agent>().Die(CauseOfDeath.Eaten);
                 m_EatingFood = null;
             }
@@ -120,9 +120,9 @@ public class Agent : MonoBehaviour {
     {
         if(m_FSM.state != AgentState.Drinking)
             return;
-        if(m_LifeComponent.m_CurrentThirst > m_AgentGenes.m_NotThirsty && m_WaterDrinking != null){
+        if(m_LifeComponent.m_CurrentThirst > m_AgentGenes.m_CriticalThirst && m_WaterDrinking != null){
             waiting = true;
-            m_WaterDrinking.GetComponent<WaterData>().Consume(gameObject, Time.deltaTime);
+            m_WaterDrinking.GetComponent<WaterData>().Consume(gameObject, Time.deltaTime*7.0f);
         }
         else{
             m_FSM.state = AgentState.Exploring;
@@ -152,7 +152,7 @@ public class Agent : MonoBehaviour {
             m_FSM.state = AgentState.Exploring;
             var father_genes = m_MateTarget.GetComponent<Agent>().m_AgentGenes;
             m_MateTarget = null;
-            m_LifeComponent.m_CurrentReproductionUrge -= 0.35f;
+            m_LifeComponent.m_CurrentReproductionUrge -= 0.85f;
             m_LifeComponent.m_CurrentReproductionUrge = Mathf.Clamp(m_LifeComponent.m_CurrentReproductionUrge, 0.0f, 1.0f);
             if (!m_AgentGenes.m_IsMale)
                 StartCoroutine(Gestate(father_genes));
@@ -202,7 +202,7 @@ public class Agent : MonoBehaviour {
             int counter = 0;
             do
             {
-                Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 3.0f);
+                Vector3 r_point = Random.insideUnitCircle.normalized * Random.Range(0.5f, 8.0f);
                 tryWanderPoint = this.transform.position + r_point;
                 var output = Physics2D.OverlapCircleAll(tryWanderPoint, 0.5f);
                 counter++;

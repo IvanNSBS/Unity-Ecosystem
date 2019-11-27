@@ -51,10 +51,15 @@ public class SteerComponent : MonoBehaviour
         for(int i = targets.Count -1; i >= 0; i--)
         {
             var target = targets[i];
+            if(target == null){
+                targets.RemoveAt(i);
+                continue;
+            }
+
             Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
             float distance = (pos - GetPosition()).magnitude;
             float sight = this.gameObject.GetComponent<Agent>().m_AgentGenes.m_SightRadius;
-            if(target == null || !target.activeSelf || distance > sight){
+            if(distance > sight || !target.activeSelf){
                 targets.RemoveAt(i);
                 continue;
             }

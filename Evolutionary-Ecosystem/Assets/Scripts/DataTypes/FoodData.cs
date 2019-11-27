@@ -27,13 +27,12 @@ public class FoodData : MonoBehaviour {
             World.instance.actualFoodAmount--;
             Destroy(gameObject);
         }
-        else    
-            gameObject.transform.localScale = start_scale * (usages/max_usages);
     }
 
     private void Update() {
         usages += Time.deltaTime * 0.1f;
         usages = Mathf.Clamp(usages, 0.0f, max_usages);
+        gameObject.transform.localScale = start_scale * (usages/max_usages);
     }
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -16,5 +16,5 @@ MonoBehaviour:
   m_TimeToDeathByHunger: 230
   m_TimeToDeathByThirst: 200
   m_TotalEnergy: 100
-  m_TotalReproductionUrge: 50
+  m_TotalReproductionUrge: 60
   timeToAdulthood: 50
