@@ -266,7 +266,7 @@ public class Agent : MonoBehaviour {
             return;
         else if (Vector3.Distance(m_MateTarget.transform.position, this.gameObject.transform.position) > m_AgentGenes.m_SightRadius)
         {
-            Debug.Log(gameObject + "Too Far to reproduce");
+            // Debug.Log(gameObject + "Too Far to reproduce");
             m_FSM.state = AgentState.Exploring;
             if(m_MateTarget.GetComponent<Agent>().m_MateTarget == this.gameObject){
                 m_MateTarget.GetComponent<Agent>().m_MateTarget = null;
@@ -341,7 +341,7 @@ public class Agent : MonoBehaviour {
         }
         
         float male_chance = male.GetComponent<Agent>().m_AgentGenes.m_Desirabilty;
-        float chance = Mathf.Lerp(0.9999f, 1.0f, male_chance);
+        float chance = Mathf.Lerp(0.15f, 1.0f, male_chance);
         if(Random.Range(0.0f, 1.0f) > chance)
             return false;
             

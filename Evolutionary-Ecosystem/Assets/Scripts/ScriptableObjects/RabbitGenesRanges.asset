@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bbc91e33223fdf419b44abe1412aa76, type: 3}
   m_Name: RabbitGenesRanges
   m_EditorClassIdentifier: 
-  max_offsprings: 8
+  max_offsprings: 11
   min_gestation_duration: 5
   max_gestation_duration: 20
   min_sight_range: 0.3
