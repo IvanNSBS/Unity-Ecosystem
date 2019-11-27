@@ -257,6 +257,7 @@ public class Agent : MonoBehaviour {
         if (!m_MateTarget)
         {
             m_FSM.state = AgentState.Exploring;
+            return;
         }
         arrived = false;
         GameObject obj = null;
@@ -300,28 +301,38 @@ public class Agent : MonoBehaviour {
 
     IEnumerator ForgetRegection(GameObject female)
     {
-        yield return new WaitForSeconds(30.0f);
+        yield return new WaitForSeconds(10.0f);
         unimpressed_females.Remove(female);
     }
 
     public bool RequestMate(GameObject male)
     {
-        if (!visible_animals.Contains(m_MateTarget))
-        {
-            m_FSM.state = AgentState.Exploring;
-            m_MateTarget = null;
+        float chance_notcritical = Mathf.Lerp(0.1f, 1f, m_LifeComponent.m_CurrentReproductionUrge/m_AgentGenes.m_CriticalUrge);
+        if(Random.Range(0.0f, 1.0f) > chance_notcritical){
+            Debug.Log(male + "tried, but not critical reproduction");
             return false;
         }
-
-        if(m_LifeComponent.m_CurrentReproductionUrge < m_AgentGenes.m_CriticalUrge)
-            return false;
         
         float male_chance = male.GetComponent<Agent>().m_AgentGenes.m_Desirabilty;
-        float chance = Mathf.Lerp(0.1f, 1.0f, male_chance);
+        float chance = Mathf.Lerp(0.9999f, 1.0f, male_chance);
         if(Random.Range(0.0f, 1.0f) > chance)
             return false;
+            
         m_MateTarget = male;
         m_FSM.state = AgentState.WaitingForPartner;
+
+
+        // if (!visible_animals.Contains(m_MateTarget))
+        // {
+        //     m_MateTarget.GetComponent<Agent>().m_MateTarget = null;
+        //     m_MateTarget.GetComponent<Agent>().m_FSM.state = AgentState.Exploring;
+        //     m_FSM.state = AgentState.Exploring;
+        //     m_MateTarget = null;
+        //     Debug.Log("Not contains, reproduction failed");
+        //     return false;
+        // }
+
+
         return true;
     }
 

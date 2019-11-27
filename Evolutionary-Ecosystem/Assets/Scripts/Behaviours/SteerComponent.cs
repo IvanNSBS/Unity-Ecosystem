@@ -51,12 +51,14 @@ public class SteerComponent : MonoBehaviour
         for(int i = targets.Count -1; i >= 0; i--)
         {
             var target = targets[i];
-            if(target == null){
+            Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
+            float distance = (pos - GetPosition()).magnitude;
+            float sight = this.gameObject.GetComponent<Agent>().m_AgentGenes.m_SightRadius;
+            if(target == null || !target.activeSelf || distance > sight){
                 targets.RemoveAt(i);
                 continue;
             }
-            Vector2 pos = new Vector2(target.transform.position.x, target.transform.position.y);
-            float distance = (pos - GetPosition()).magnitude;
+
             if(distance < min_dist)
             {
                 min_dist = distance;
@@ -93,9 +95,9 @@ public class SteerComponent : MonoBehaviour
 
         if(target_pos != null)
         {
-            seeked = target_pos;
             Vector2 pos = new Vector2(target_pos.transform.position.x, target_pos.transform.position.y);
             if(min_dist < arrive_tol){
+                seeked = target_pos;
                 if (debug)
                     Debug.Log(this.gameObject + " Arrived");
                 var steer =  GetSteer(pos, seek_tol, genes, lerp: true);
