@@ -19,7 +19,7 @@ MonoBehaviour:
   max_sight_range: 3
   min_forget_range: 2
   max_forget_range: 5
-  min_speed: 0.3
+  min_speed: 0.5
   max_speed: 1.3
   min_force: 0.8
   max_force: 2

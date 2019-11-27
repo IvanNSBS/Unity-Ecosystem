@@ -11,15 +11,13 @@ public class AgentStateMachine
     {
         m_Owner = owner;    
         m_SteerWeights.Add(AgentState.Fleeing, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
-        m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 1.5f, 0.0f } );
-        m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 0.0f, 1.0f, 1.0f, 0.7f, 0.0f } );
-        m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 0.0f, 0.0f, 1.0f, 0.7f, 1.0f } );
-        m_SteerWeights.Add(AgentState.GoingToNest, new[]{ 1.0f, 1.0f, 1.0f, 0.0f, 0.7f, 0.0f } );
-        m_SteerWeights.Add(AgentState.GoingToPartner, new[]{ 1.0f, 0.0f, 0.0f, 1.0f, 0.7f, 0.0f} );
+        m_SteerWeights.Add(AgentState.Exploring, new[]{ 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f } );
+        m_SteerWeights.Add(AgentState.GoingToFood, new[]{ 1.0f, 0.0f, 1.0f, 0.0f, 0.7f, 0.0f } );
+        m_SteerWeights.Add(AgentState.GoingToWater, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.7f, 1.0f } );
+        m_SteerWeights.Add(AgentState.GoingToPartner, new[]{ 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f} );
         m_SteerWeights.Add(AgentState.WaitingForPartner, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.Eating, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.Drinking, new[]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
-        m_SteerWeights.Add(AgentState.Resting, new[]{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } );
         m_SteerWeights.Add(AgentState.SearchingForMate, new[]{1.0f, 0.0f, 0.0f, 1.0f, 0.7f, 0.0f});
         m_SteerWeights.Add(AgentState.Reproducing, new[]{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
     }
@@ -91,13 +89,13 @@ public class AgentStateMachine
         }
 
         Vector2 sum = steer_seek + steer_avoid + steer_explore + steer_reproduction + steer_water;
-        if(state == AgentState.GoingToWater){
-            // Debug.Log("seek food = " + steer_seek );
-            // Debug.Log("seek water = " + steer_water );
-            // Debug.Log("avoid = " + steer_avoid );
-            // Debug.Log("explore = " + steer_explore );
-            // Debug.Log("reproduction = " + steer_reproduction );
-        }
+        // if(state == AgentState.GoingToPartner && !reproduction_arrive){
+        //     Debug.Log("seek food = " + steer_seek );
+        //     Debug.Log("seek water = " + steer_water );
+        //     Debug.Log("avoid = " + steer_avoid );
+        //     Debug.Log("explore = " + steer_explore );
+        //     Debug.Log("reproduction = " + steer_reproduction );
+        // }
         if(state == AgentState.GoingToPartner && reproduction_arrive){
             state = AgentState.Reproducing;
             m_Owner.m_MateTarget.GetComponent<Agent>().m_FSM.state = AgentState.Reproducing;

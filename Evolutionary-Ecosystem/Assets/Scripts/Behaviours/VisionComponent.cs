@@ -26,24 +26,29 @@ public class VisionComponent : MonoBehaviour
         if(!agent){
             var food = other.gameObject.GetComponent<FoodData>();
             if(food){
-                if (!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject) && obj_agent.m_Diet == AgentDiet.Vegetal)
+                if (!m_IsForget && !obj_agent.visible_food.Contains(other.gameObject) && 
+                     obj_agent.m_Diet == AgentDiet.Vegetal && obj_agent.visible_food.Count < 5)
                     obj_agent.visible_food.Add(other.gameObject);
             }
-            else if(!m_IsForget && !obj_agent.visible_water.Contains(other.gameObject))
+            else if(!m_IsForget && !obj_agent.visible_water.Contains(other.gameObject) 
+                    && obj_agent.visible_water.Count < 5)
                     obj_agent.visible_water.Add(other.gameObject);
         }
 
         else if(!m_IsForget && !other.isTrigger){
             if(obj_agent.m_Diet == AgentDiet.Vegetal){
-                if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_animals.Contains(other.gameObject))
+                if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_animals.Contains(other.gameObject) && 
+                    obj_agent.visible_animals.Count < 5)
                     obj_agent.visible_animals.Add(other.gameObject);
-                else if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_predators.Contains(other.gameObject))
+
+                else if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_predators.Contains(other.gameObject) && 
+                        obj_agent.visible_predators.Count < 5)
                     obj_agent.visible_predators.Add(other.gameObject);
             } 
             else {
-                if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_food.Contains(other.gameObject))
+                if(agent.m_Diet == AgentDiet.Vegetal && !obj_agent.visible_food.Contains(other.gameObject) && obj_agent.visible_food.Count < 5)
                     obj_agent.visible_food.Add(other.gameObject);
-                if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_animals.Contains(other.gameObject))
+                if(agent.m_Diet == AgentDiet.SmallerAnimals && !obj_agent.visible_animals.Contains(other.gameObject) && obj_agent.visible_animals.Count < 5)
                     obj_agent.visible_animals.Add(other.gameObject);
             }
         }    

@@ -136,7 +136,15 @@ public class Agent : MonoBehaviour {
     {
         if(m_FSM.state != AgentState.Reproducing)
             return;
+        if(m_MateTarget == null)
+            return;
         
+        if(m_MateTarget.GetComponent<Agent>().m_MateTarget == null){
+            m_MateTarget = null;
+            m_FSM.state = AgentState.Exploring;
+            return;
+        }
+
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         m_reproducing += Time.deltaTime;
         if(m_reproducing >= m_ReproductionTime){
@@ -212,7 +220,7 @@ public class Agent : MonoBehaviour {
         steer = m_SteerBehavior.SeekAndArrive(pts, 10000, 0.35f, m_AgentGenes, ref arrived);
 
         if( arrived ){
-            StartCoroutine( WaitAfterArrive(1.2f) );
+            StartCoroutine( WaitAfterArrive(0.75f) );
         }
     }
 
@@ -254,15 +262,23 @@ public class Agent : MonoBehaviour {
 
     public void GoToMate(ref Vector2 steer, ref bool arrived)
     {
-        if (!m_MateTarget)
+        if(!m_MateTarget)
+            return;
+        else if (Vector3.Distance(m_MateTarget.transform.position, this.gameObject.transform.position) > m_AgentGenes.m_SightRadius)
         {
+            Debug.Log(gameObject + "Too Far to reproduce");
             m_FSM.state = AgentState.Exploring;
+            if(m_MateTarget.GetComponent<Agent>().m_MateTarget == this.gameObject){
+                m_MateTarget.GetComponent<Agent>().m_MateTarget = null;
+                m_MateTarget.GetComponent<Agent>().m_FSM.state = AgentState.Exploring;
+            }
+            m_MateTarget = null;
             return;
         }
         arrived = false;
         GameObject obj = null;
         List<GameObject> mate = new List<GameObject>{ m_MateTarget };
-        steer = m_SteerBehavior.SeekAndArrive(ref mate, m_AgentGenes.m_SightRadius, 0.4f, m_AgentGenes, ref arrived, ref obj);
+        steer = m_SteerBehavior.SeekAndArrive(ref mate, 10000f, 0.8f, m_AgentGenes, ref arrived, ref obj);
     }
 
     public void ScanForPartner()
@@ -307,6 +323,17 @@ public class Agent : MonoBehaviour {
 
     public bool RequestMate(GameObject male)
     {
+        if(m_MateTarget){    
+            if(male != m_MateTarget)
+                return false;            
+
+            if( m_MateTarget.GetComponent<Agent>().m_MateTarget == this.gameObject && 
+                Vector3.Distance(m_MateTarget.transform.position, this.transform.position) > m_AgentGenes.m_SightRadius){
+                m_MateTarget.GetComponent<Agent>().m_MateTarget = null;
+                m_MateTarget = null;
+            }
+        }
+
         float chance_notcritical = Mathf.Lerp(0.1f, 1f, m_LifeComponent.m_CurrentReproductionUrge/m_AgentGenes.m_CriticalUrge);
         if(Random.Range(0.0f, 1.0f) > chance_notcritical){
             Debug.Log(male + "tried, but not critical reproduction");
@@ -336,6 +363,36 @@ public class Agent : MonoBehaviour {
         return true;
     }
 
+    private void DontWaitForPartner()
+    {
+        if(m_FSM.state != AgentState.WaitingForPartner || m_FSM.state != AgentState.GoingToPartner)
+            return;
+
+        if(m_MateTarget){
+            if(m_MateTarget.GetComponent<Agent>().m_MateTarget != this.gameObject){
+                m_MateTarget = null;
+                m_FSM.state = AgentState.Exploring;
+            }   
+            else if( (gameObject.transform.position-m_MateTarget.transform.position).magnitude > m_AgentGenes.m_SightRadius){
+                Debug.Log(gameObject + " Wont wait for partner");
+                m_MateTarget.GetComponent<Agent>().m_MateTarget = null;
+                m_MateTarget = null;
+                m_FSM.state = AgentState.Exploring;
+            }
+        }
+    }
+
+    private void ImFleeing()
+    {
+        if(m_FSM.state == AgentState.Fleeing)
+        {
+            m_reproducing = 0.0f;
+            m_MateTarget = null;
+            m_EatingFood = null;
+            m_WaterDrinking = null;
+            return;
+        }
+    }
     private void Update()
     {
         if(m_LifeComponent.m_CurrentHunger >= 1.0f)
@@ -352,5 +409,7 @@ public class Agent : MonoBehaviour {
         ConsumeWater();
         ScanForPartner();
         Reproduce();
+        DontWaitForPartner();
+        ImFleeing();
     }
 }

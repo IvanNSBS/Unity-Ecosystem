@@ -22,4 +22,4 @@ MonoBehaviour:
   min_speed: 1
   max_speed: 2.3
   min_force: 1
-  max_force: 1.8
+  max_force: 1.5
